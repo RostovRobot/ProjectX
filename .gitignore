@@ -240,7 +240,3 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
-/Tracer.cs
-/TacticType.cs
-/Tactic.cs
-/StratType.cs
