@@ -63,8 +63,6 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             //вызываем метод getHotZone у объекта-стратегии
 
-            self.
-
             move.Speed = game.WizardForwardSpeed;
             move.StrafeSpeed = game.WizardStrafeSpeed;
             move.Turn = game.WizardMaxTurnAngle;
