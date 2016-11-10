@@ -23,5 +23,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         {
             return new Point2D();
         }
+
+        public void setKommand(World world, Game game, Wizard self)
+        {
+
+        }
     }
 }
