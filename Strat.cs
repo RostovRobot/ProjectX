@@ -25,14 +25,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
 
         /// <summary>
-        /// !!! НЕ РЕАЛИЗОВАНО!!! Рассылает команды союзникам, если мы - верховный маг
+        /// !!! НЕ РЕАЛИЗЛВАНО!!! Рассылает команды союзникам, если мы - верховный маг
         /// </summary>
         /// <param name="world">Игровой мир</param>
         /// <param name="game">Константы игры</param>
         /// <param name="self">Собственный маг</param>
         public void setKommand(World world, Game game, Wizard self)
         {
-            //первым делом проверяем - верховный ли мы маг?
+            //первым делом проверяем - вырховный ли мы маг?
             if(self.IsMaster)
             {
                 //рассылаем команды
