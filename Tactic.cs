@@ -18,6 +18,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="world">Игровой мир</param>
         /// <param name="game">Константы игры</param>
         /// <param name="self">Собственный маг</param>
+        /// <param name="move">Управление магом</param>
         /// <returns>Объект-движение</returns>
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
