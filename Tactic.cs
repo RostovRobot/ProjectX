@@ -23,8 +23,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
-
-
+            
 
             return new Move();
         }
@@ -70,6 +69,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         //Простейший запуск ракеты в заданного противника. Переписан с офсайта.
         //targetUnit здесь - цель, которую выбрали для атаки.
         //World, Game добавил на всякий случай. Могут пригодиться.
+        /// <summary>
+        /// Совершает выстрел в заданного протиыника
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <param name="targetUnit">Выбранная цель</param>
+        /// <param name="move">Управление магом</param>
         public void getRocket(World world, Game game, Wizard self, LivingUnit targetUnit, Move move)
         {
             if(targetUnit.GetDistanceTo(targetUnit)<=self.CastRange)
