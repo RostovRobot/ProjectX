@@ -23,7 +23,36 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
+
+
+
             return new Move();
+        }
+        public List<List<LivingUnit>> getTargets(World world, Wizard self)//0-Волшебники,1-миньоны, 2-строения
+        {
+            List<List<LivingUnit>> targets = new List<List<LivingUnit>>();
+            targets.Add(new List<LivingUnit>());
+            foreach (var wizard in world.Wizards)
+            {
+                if(wizard.Faction!=self.Faction)
+                { targets[0].Add(wizard); }
+            }
+
+            targets.Add(new List<LivingUnit>());
+            foreach (var wizard in world.Wizards)
+            {
+                if (wizard.Faction != self.Faction)
+                { targets[1].Add(wizard); }
+            }
+
+            targets.Add(new List<LivingUnit>());
+            foreach (var wizard in world.Wizards)
+            {
+                if (wizard.Faction != self.Faction)
+                { targets[2].Add(wizard); }
+            }
+
+            return targets;
         }
 
 
