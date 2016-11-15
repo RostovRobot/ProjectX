@@ -23,32 +23,93 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
+            getRocket(world, game, self, getMostImportantTarget(getTargets(world, self), self), move);
+            return move;
             
 
-            return new Move();
+            //return new Move();
         }
-        public List<List<LivingUnit>> getTargets(World world, Wizard self)//0-Волшебники,1-миньоны, 2-строения
+
+        
+        public LivingUnit getMostImportantTarget(List<LivingUnit> targets,Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
         {
-            List<List<LivingUnit>> targets = new List<List<LivingUnit>>();
-            targets.Add(new List<LivingUnit>());
+            double mindist = double.MaxValue;
+
+            Wizard targetwizard=null;
+            foreach (var wizard in targets)
+            {
+                if (wizard is Wizard)
+                {
+                    double distance = GetDistance(self.X, self.Y, wizard.X, wizard.Y);
+                    if (distance<mindist)
+                    {
+                        mindist = distance;
+                        targetwizard = wizard as Wizard;
+                    }
+                }
+            }
+
+            if (targetwizard != null) { return targetwizard; }
+
+            Building targetBuild=null;
+
+            foreach (var build in targets)
+            {
+                if(build is Building)
+                {
+                    double distance = GetDistance(self.X, self.Y, build.X, build.Y);
+                    if(distance<mindist)
+                    {
+                        mindist = distance;
+                        targetBuild = build as Building;
+                    }
+
+                }
+            }
+
+            if (targetBuild != null) { return targetBuild; }
+
+            Minion targetminion = null;
+
+            foreach (var minion in targets)
+            {
+                if(minion is Minion)
+                {
+                    double distance = GetDistance(self.X, self.Y, minion.X, minion.Y);
+                    if(distance<mindist)
+                    {
+                        mindist = distance;
+                        targetminion = minion as Minion;
+                    }
+                }
+            }
+
+            return targetminion;
+
+        }
+
+        public List<LivingUnit> getTargets(World world, Wizard self)//0-Волшебники,1-миньоны, 2-строения
+        {
+            List<LivingUnit> targets = new List<LivingUnit>();
+            
             foreach (var wizard in world.Wizards)
             {
                 if(wizard.Faction!=self.Faction)
-                { targets[0].Add(wizard); }
+                { targets.Add(wizard); }
             }
 
-            targets.Add(new List<LivingUnit>());
-            foreach (var wizard in world.Wizards)
+            
+            foreach (var build in world.Buildings)
             {
-                if (wizard.Faction != self.Faction)
-                { targets[1].Add(wizard); }
+                if (build.Faction != self.Faction)
+                { targets.Add(build); }
             }
 
-            targets.Add(new List<LivingUnit>());
-            foreach (var wizard in world.Wizards)
+            
+            foreach (var minion in world.Minions)
             {
-                if (wizard.Faction != self.Faction)
-                { targets[2].Add(wizard); }
+                if( (minion.Faction != self.Faction)&&(minion.Faction!=Faction.Neutral))
+                { targets.Add(minion); }
             }
 
             return targets;
@@ -56,6 +117,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
 
+        public double GetDistance(double X1,double Y1,double X2,double Y2)
+        {
+            return Math.Sqrt((X2 - X1) * (X2 - X1) + (Y2 - Y1) * (Y2 - Y1));
+
+
+
+
+        }
         
 
 
