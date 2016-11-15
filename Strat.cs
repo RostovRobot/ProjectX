@@ -12,6 +12,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
+        private LaneType lane; // переменная в которую задаем нашу линию
         /// <summary>
         /// !!! НЕ РЕАЛИЗОВАНО!!! Возвращает координаты самой важной зоны
         /// </summary>
@@ -21,8 +22,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <returns>Точка на двухмерной карте</returns>
         public Point2D getHotZone(World world, Game game, Wizard self)
         {
-            return new Point2D();
+            lane = LaneType.Middle;// наша линия - мид
+            Point2D HotZone = new Point2D(2000, 2000);
+            return HotZone;
         }
+
+
 
         /// <summary>
         /// !!! НЕ РЕАЛИЗЛВАНО!!! Рассылает команды союзникам, если мы - верховный маг
@@ -37,6 +42,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 //рассылаем команды
             }
+        }
+
+        public void Alliance()
+        {
+
         }
     }
 }
