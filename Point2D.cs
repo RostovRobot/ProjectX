@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,43 +13,43 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Point2D
     {
         /// <summary>
-        /// Координата X точки
+        /// Координата X
         /// </summary>
-        public double X;
+        private double x;
         /// <summary>
-        /// Координата Y точки
+        /// Координата Y
         /// </summary>
-        public double Y;
+        private double y;
 
-        /// <summary>
-        /// Метод-конструктор с заданными координатами
-        /// </summary>
-        /// <param name="x">Координата X</param>
-        /// <param name="y">Координата Y</param>
         public Point2D(double x, double y)
         {
-            X = x;
-            Y = y;
+            this.x = x;
+            this.y = y;
         }
 
-        /// <summary>
-        /// Метод-конструктор с заданными координатами
-        /// </summary>
-        /// <param name="x">Координата X</param>
-        /// <param name="y">Координата Y</param>
-        public Point2D(int x, int y)
+        public double getX()
         {
-            X = x;
-            Y = y;
+            return x;
         }
 
-        /// <summary>
-        /// Метод-конструктор без параметров (создает точку с нулевыми координатами)
-        /// </summary>
-        public Point2D()
+        public double getY()
         {
-            X = 0;
-            Y = 0;
+            return y;
+        }
+
+        public double DistanceTo(double x, double y)
+        {
+            return Math.Sqrt(this.x - x * this.x - x + this.y - y * this.y - y);
+        }
+
+        public double DistanceTo(Point2D point)
+        {
+            return DistanceTo(point.x, point.y);
+        }
+
+        public double DistanceTo(Unit unit)
+        {
+            return DistanceTo(unit.X, unit.Y);
         }
     }
 }

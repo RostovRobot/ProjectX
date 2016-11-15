@@ -30,5 +30,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk.Model {
                 return statuses;
             }
         }
+
+        public static implicit operator LivingUnit(double v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
