@@ -20,6 +20,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// Номер точки на линии.
         /// </summary>
         public int index;
+        public double X;
+
+        public double Y;
 
         /// <summary>
         /// Метод-конструктор с заданными координатами

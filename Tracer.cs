@@ -63,7 +63,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 {
                     if (points[NearestPoint].index < CenterLinePoint)
                     {
-                        for (int i = points[NearestPoint][].index; i <= CenterLinePoint; i++)
+                        for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
                         {
                             Waypoints.Add(points[i]);
                         }
@@ -213,9 +213,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return Waypoints;
         }
 
-        public TraceMid()
+        public void TraceMid()
         {
-            return;
+            //return;
         }
 
 
@@ -225,7 +225,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return new Move();
         }
 
-        private void goTo(Point2D point)
+        /*private void goTo(Point2D point)
         {
             double angle = self.GetAngleTo(point.X, point.Y);
 
@@ -235,7 +235,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 move.Speed = game.WizardForwardSpeed;
             }
-        }
+        }*/
 
         /*private Point2D NextWaypoint()
         {

@@ -13,10 +13,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Strat
     {
         private LaneType lane; // переменная в которую задаем нашу линию
-        private Wizard self;
+        /*private Wizard self;
         private World world;
         private Game game;
-        private Move move;
+        private Move move;*/
 
         private double lowHPFactor;
 
@@ -30,9 +30,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         public Point2D getHotZone(World world, Game game, Wizard self)
         {
             Point2D HotZone = new Point2D(world.Width / 2, world.Height/2);
-            LivingUnit nearestTarget = getNearestTarget();
-            LivingUnit nearestBuilding = getNearestBuilding();
-            Point2D myBase = getMyBase();
+            LivingUnit nearestTarget = getNearestTarget(world, self);
+            LivingUnit nearestBuilding = getNearestBuilding(world, self);
+            Point2D myBase = getMyBase(self);
 
             if (self.Life < self.MaxLife * lowHPFactor)
             {
@@ -74,7 +74,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="world"></param>
         /// <param name="self"></param>
         /// <returns></returns>
-        private LivingUnit getNearestTarget()
+        private LivingUnit getNearestTarget(World world, Wizard self)
         {
             List<LivingUnit> targets = new List<LivingUnit>();
             foreach (LivingUnit element in world.Buildings)
@@ -114,7 +114,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// Возвращает ближайшую союзную постройку
         /// </summary>
         /// <returns></returns>
-        private LivingUnit getNearestBuilding()
+        private LivingUnit getNearestBuilding(World world, Wizard self)
         {
             List<LivingUnit> targetsBuilding = new List<LivingUnit>();
             foreach (LivingUnit element in world.Buildings)
@@ -146,27 +146,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// Возвращает координату нашей базы
         /// </summary>
         /// <returns></returns>
-        private Point2D getMyBase()
+        private Point2D getMyBase(Wizard self)
         {
-            LivingUnit nearestTarget = getNearestTarget();
-            LivingUnit nearestBuilding = getNearestBuilding();
-            List<LivingUnit> targetsBase = new List<LivingUnit>();
-            foreach (LivingUnit element in world.Buildings)
+            Point2D myBase;
+            if (self.Faction == Faction.Academy)
             {
-                targetsBase.AddRange(world.Buildings);
-            }
-            Point2D myBase = null;
-
-            foreach (LivingUnit targetBase in targetsBase)
+                myBase = new Point2D(500, 500);
+            } else
             {
-                if(self.Faction == Faction.Academy)
-                {
-                    myBase = new Point2D (500,500);
-                }
-                else
-                {
-                    myBase = new Point2D (3500,3500);
-                }
+                myBase = new Point2D(3500, 3500);
             }
             return myBase;
         }
