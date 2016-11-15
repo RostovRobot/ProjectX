@@ -13,8 +13,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Strat
     {
         private LaneType lane; // переменная в которую задаем нашу линию
+        private Wizard self;
+        private World world;
+        private Game game;
+        private Move move;
+        private double lowHPFactor;
+
+
         /// <summary>
-        /// !!! НЕ РЕАЛИЗОВАНО!!! Возвращает координаты самой важной зоны
+        /// Возвращает координаты самой важной зоны
         /// </summary>
         /// <param name="world">Игровой мир</param>
         /// <param name="game">Константы игры</param>
@@ -22,13 +29,30 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <returns>Точка на двухмерной карте</returns>
         public Point2D getHotZone(World world, Game game, Wizard self)
         {
-            lane = LaneType.Middle;// наша линия - мид
-            Point2D HotZone = new Point2D(2000, 2000);
+            Point2D HotZone = new Point2D(world.Width / 2, world.Height);
+            LivingUnit nearestTarget = getNearestTarget();
+            LivingUnit nearestBuilding = getNearestBuilding();
+
+            if (self.Life < self.MaxLife * lowHPFactor)
+            {
+                HotZone = new Point2D(nearestBuilding.X, nearestBuilding.Y);
+
+                if (nearestTarget != null)
+                {
+                    double distance = self.GetDistanceTo(nearestTarget);
+
+                    if (distance <= self.CastRange)
+                    {
+                        HotZone = new Point2D(nearestTarget.X,nearestTarget.Y);
+                    }
+                }
+            }
+            else
+            {
+                HotZone = new Point2D(2000, 2000);
+            }
             return HotZone;
         }
-
-
-
         /// <summary>
         /// !!! НЕ РЕАЛИЗЛВАНО!!! Рассылает команды союзникам, если мы - верховный маг
         /// </summary>
@@ -43,10 +67,79 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 //рассылаем команды
             }
         }
-
-        public void Alliance()
+        /// <summary>
+        /// Метод возвращает ближайшую вражескую цель для атаки
+        /// </summary>
+        /// <param name="world"></param>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        private LivingUnit getNearestTarget()
         {
+            List<LivingUnit> targets = new List<LivingUnit>();
+            foreach (LivingUnit element in world.Buildings)
+            {
+                targets.AddRange(world.Buildings);
+            }
+            foreach (LivingUnit element in world.Wizards)
+            {
+                targets.AddRange(world.Wizards);
+            }
+            foreach (LivingUnit element in world.Minions)
+            {
+                targets.AddRange(world.Minions);
+            }
 
+            LivingUnit nearestTarget = null;
+            double nearestTargetDistance = double.MaxValue;
+
+            foreach (LivingUnit target in targets)
+            {
+                if (target.Faction == Faction.Neutral || target.Faction == self.Faction)
+                {
+                    continue;
+                }
+
+                double distance = self.GetDistanceTo(target);
+
+                if (distance < nearestTargetDistance)
+                {
+                    nearestTarget = target;
+                    nearestTargetDistance = distance;
+                }
+            }
+            return nearestTarget;
+        }
+        /// <summary>
+        /// Возвращает ближайшую союзную постройку
+        /// </summary>
+        /// <returns></returns>
+        private LivingUnit getNearestBuilding()
+        {
+            List<LivingUnit> targetsBuilding = new List<LivingUnit>();
+            foreach (LivingUnit element in world.Buildings)
+            {
+                targetsBuilding.AddRange(world.Buildings);
+            }
+            LivingUnit nearestBuilding = null;
+            double nearestBuildingDistance = double.MaxValue;
+            
+            foreach (LivingUnit targetBuilding in targetsBuilding)
+            {
+                if (targetBuilding.Faction == Faction.Neutral || targetBuilding.Faction != self.Faction)
+                {
+                    continue;
+                }
+
+                double distance = self.GetDistanceTo(targetBuilding);
+
+                if (distance < nearestBuildingDistance)
+                {
+                    nearestBuilding = targetBuilding;
+                    nearestBuildingDistance = distance;
+                }
+
+            }
+            return nearestBuilding;
         }
     }
 }
