@@ -4,8 +4,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
     public sealed class MyStrategy : IStrategy
     {
+        Strat myStrat = new Strat();
+        Tracer myTracer = new Tracer();
+        Tactic myTactic = new Tactic();
+        Point2D hotZone = new Point2D();
         public void Move(Wizard self, World world, Game game, Move move)
         {
+            #region
             //1. Стратегическая составляющая.
             //Это выбор стратегии для всех участников (если мы - верховный)
             //Выбор стратегии из пожеланий верховного
@@ -52,7 +57,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             //Это может быть регулятор
             //Это выполнение атак
             //и т.д.
-
+            #endregion
 
             if (self.IsMaster)
             {
@@ -61,12 +66,18 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 //НАДО ПРОВЕРИТЬ, МОЖЕМ ЛИ МЫ ВЫДАВАТЬ КОМАНДЫ ВСЕМ, ВКЛЮЧАЯ СЕБЯ
             }
 
+            hotZone = myStrat.getHotZone(world, game, self);
+
+            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < 600)
+            {
+                myTracer.getTrace(hotZone, world, game, self);
+            } else
+            {
+                myTactic.getTacticMove(world, game, self, move);
+            }
+
             //вызываем метод getHotZone у объекта-стратегии
 
-            move.Speed = game.WizardForwardSpeed;
-            move.StrafeSpeed = game.WizardStrafeSpeed;
-            move.Turn = game.WizardMaxTurnAngle;
-            move.Action = ActionType.MagicMissile;
         }
     }
 }

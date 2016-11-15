@@ -27,6 +27,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             this.y = y;
         }
 
+        public Point2D()
+        {
+            x = 0;
+            y = 0;
+        }
+
         public double getX()
         {
             return x;
