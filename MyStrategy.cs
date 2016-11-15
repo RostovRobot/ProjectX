@@ -54,7 +54,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             //и т.д.
 
 
-            if(self.IsMaster)
+            if (self.IsMaster)
             {
                 //вызываем метод setKommand у объекта-стратегии
 
