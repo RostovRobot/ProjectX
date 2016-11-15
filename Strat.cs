@@ -17,8 +17,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         private World world;
         private Game game;
         private Move move;
-        private double lowHPFactor;
 
+        private double lowHPFactor;
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -29,13 +29,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <returns>Точка на двухмерной карте</returns>
         public Point2D getHotZone(World world, Game game, Wizard self)
         {
-            Point2D HotZone = new Point2D(world.Width / 2, world.Height);
+            Point2D HotZone = new Point2D(world.Width / 2, world.Height/2);
             LivingUnit nearestTarget = getNearestTarget();
             LivingUnit nearestBuilding = getNearestBuilding();
+            Point2D myBase = getMyBase();
 
             if (self.Life < self.MaxLife * lowHPFactor)
             {
-                HotZone = new Point2D(nearestBuilding.X, nearestBuilding.Y);
+                HotZone = myBase;
 
                 if (nearestTarget != null)
                 {
@@ -140,6 +141,34 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             }
             return nearestBuilding;
+        }
+        /// <summary>
+        /// Возвращает координату нашей базы
+        /// </summary>
+        /// <returns></returns>
+        private Point2D getMyBase()
+        {
+            LivingUnit nearestTarget = getNearestTarget();
+            LivingUnit nearestBuilding = getNearestBuilding();
+            List<LivingUnit> targetsBase = new List<LivingUnit>();
+            foreach (LivingUnit element in world.Buildings)
+            {
+                targetsBase.AddRange(world.Buildings);
+            }
+            Point2D myBase = null;
+
+            foreach (LivingUnit targetBase in targetsBase)
+            {
+                if(self.Faction == Faction.Academy)
+                {
+                    myBase = new Point2D (500,500);
+                }
+                else
+                {
+                    myBase = new Point2D (3500,3500);
+                }
+            }
+            return myBase;
         }
     }
 }
