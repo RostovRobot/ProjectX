@@ -70,7 +70,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < 600)
             {
-                myTracer.getTrace(hotZone, world, game, self);
+                myTracer.goTo(hotZone, world, game, self);
             } else
             {
                 myTactic.getTacticMove(world, game, self, move);
