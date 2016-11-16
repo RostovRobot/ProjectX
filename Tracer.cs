@@ -13,7 +13,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Tracer
     {
         private double WAYPOINT_RADIUS = 100.0D;
-          
+
         private Wizard self;
         private World world;
         private Game game;
@@ -44,26 +44,18 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="needPoint2D">Точка, на которую надо прийти</param>
         /// <param name="transition">Индекс для перехода по линиям</param>
         /// <returns>Список вэйпоинтов для пути</returns>
-        public List<LinePoint> tracerGet(List<LinePoint> points, Point2D needPoint2D, int transition)
+        public List<LinePoint> tracerGet(List<LinePoint> points, Point2D needPoint2D, int transition, Wizard self)
         {
-            
-            List<LinePoint>[] FullWaypoints = new List<LinePoint>[2];
-            for(int i = 0;i< (FullWaypoints[0].Count - 1) + (FullWaypoints[1].Count - 1) + (FullWaypoints[2].Count - 1); i++)
+
+            List<LinePoint>[] FullWaypoints = new List<LinePoint>[3];
+            for (int i = 0; i < 3; i++)
+                FullWaypoints[i] = new List<LinePoint>();
+            for (int i = 0; i < points.Count; i++)
             {
-                if(points[i].line == 0)
-                {
-                    FullWaypoints[0].Add(points[i]);
-                }
-                if (points[i].line == 1)
-                {
-                    FullWaypoints[1].Add(points[i]);
-                }
-                if (points[i].line == 2)
-                {
-                    FullWaypoints[2].Add(points[i]);
-                }
+                FullWaypoints[points[i].line].Add(points[i]);
+
             }
-            List <LinePoint> Waypoints = new List<LinePoint>();
+            List<LinePoint> Waypoints = new List<LinePoint>();
             double SMin = 2000;
             double SMinf = 0;
             double NMin = 2000;
@@ -72,20 +64,20 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             int NearestPointLine = 0;
             LinePoint needPoint;
             int ineedPoint = 0;
-            for (int i = 0; i < points.Count-1; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 double px = points[i].X;
                 double py = points[i].Y;
-                double resX = px-self.X;
-                double resY = py-self.Y;
+                double resX = px - self.X;
+                double resY = py - self.Y;
                 SMinf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
-                if (SMin>SMinf)
+                if (SMin > SMinf)
                 {
                     SMin = SMinf;
                     NearestPoint = i;
                 }
             }
-            for (int i = 0; i < points.Count - 1; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 double px = points[i].X;
                 double py = points[i].Y;
@@ -108,14 +100,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 {
                     for (int i = points[NearestPoint].index; i <= needPoint.index; i++)
                     {
-                        Waypoints.Add(FullWaypoints[i][NearestPointLine]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
                 else
                 {
                     for (int i = points[NearestPoint].index; i >= needPoint.index; i--)
                     {
-                        Waypoints.Add(FullWaypoints[i][NearestPointLine]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
             }
@@ -125,33 +117,33 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 {
                     for (int i = points[NearestPoint].index; i <= transition; i++)
                     {
-                        Waypoints.Add(FullWaypoints[i][NearestPointLine]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
                 else
                 {
                     for (int i = points[NearestPoint].index; i >= transition; i--)
                     {
-                        Waypoints.Add(FullWaypoints[i][needPoint.line]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
-                
-                
-                Waypoints.Add(FullWaypoints[transition][1]);
-                if(needPoint.line!=1)
-                Waypoints.Add(FullWaypoints[transition][needPoint.line]);
+
+
+              
+                if (needPoint.line != 1)
+                    Waypoints.Add(FullWaypoints[1][transition]);  
                 if (points[transition].index <= needPoint.index)
                 {
-                    for (int i = transition; i >= needPoint.index; i++)
+                    for (int i = transition; i <= needPoint.index; i++)
                     {
-                        Waypoints.Add(FullWaypoints[i][needPoint.line]);
+                        Waypoints.Add(FullWaypoints[needPoint.line][i]);
                     }
                 }
                 else
                 {
-                    for (int i = points[transition].index; i <= needPoint.index; i--)
+                    for (int i = points[transition].index; i >= needPoint.index; i--)
                     {
-                        Waypoints.Add(FullWaypoints[i][needPoint.line]);
+                        Waypoints.Add(FullWaypoints[needPoint.line][i]);
                     }
                 }
             }
@@ -167,15 +159,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <returns>Список точек</returns>
         public List<LinePoint> getPointMap(World world)
         {
-            List<LinePoint> FullWayPoint  = new List<LinePoint>();
+            List<LinePoint> FullWayPoint = new List<LinePoint>();
             //line0
-            FullWayPoint.Add(new LinePoint(200, 3400, 0, 0));
+            FullWayPoint.Add(new LinePoint(200, 3200, 0, 0));
             FullWayPoint.Add(new LinePoint(200, 2600, 0, 1));
             FullWayPoint.Add(new LinePoint(200, 1700, 0, 2));
             FullWayPoint.Add(new LinePoint(400, 400, 0, 3));
             FullWayPoint.Add(new LinePoint(1700, 200, 0, 4));
             FullWayPoint.Add(new LinePoint(2600, 200, 0, 5));
-            FullWayPoint.Add(new LinePoint(3400, 200, 0, 6));
+            FullWayPoint.Add(new LinePoint(3200, 200, 0, 6));
             //line1
             FullWayPoint.Add(new LinePoint(600, 3400, 1, 0));
             FullWayPoint.Add(new LinePoint(1100, 2900, 1, 1));
@@ -185,13 +177,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(2900, 1100, 1, 5));
             FullWayPoint.Add(new LinePoint(3400, 600, 1, 6));
             //line2
-            FullWayPoint.Add(new LinePoint(600, 3800, 2, 0));
+            FullWayPoint.Add(new LinePoint(800, 3800, 2, 0));
             FullWayPoint.Add(new LinePoint(1400, 3800, 2, 1));
             FullWayPoint.Add(new LinePoint(2300, 3800, 2, 2));
             FullWayPoint.Add(new LinePoint(3600, 3600, 2, 3));
             FullWayPoint.Add(new LinePoint(3800, 2300, 2, 4));
             FullWayPoint.Add(new LinePoint(3800, 1400, 2, 5));
-            FullWayPoint.Add(new LinePoint(3800, 600, 2, 6));
+            FullWayPoint.Add(new LinePoint(3800, 800, 2, 6));
             return FullWayPoint;
         }
 
@@ -215,20 +207,20 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint = getPointMap(world);
             if (self.Faction == Faction.Academy)
             {
-                tracebase = tracerGet(FullWayPoint, point, 0);
+                tracebase = tracerGet(FullWayPoint, point, 0, self);
             }
             else
             {
-                tracebase = tracerGet(FullWayPoint, point, 6);
+                tracebase = tracerGet(FullWayPoint, point, 6, self);
             }
-                List<LinePoint> tracemid = tracerGet(FullWayPoint, point, 3);
+            List<LinePoint> tracemid = tracerGet(FullWayPoint, point, 3, self);
             double summid = 0;
             double sumbase = 0;
             double px = 0;
             double py = 0;
             double resX = 0;
             double resY = 0;
-            for (int i = 0; i < tracebase.Count - 1; i++)
+            for (int i = 0; i < tracebase.Count - 2; i++)
             {
                 px = tracebase[i].X;
                 py = tracebase[i].Y;
@@ -236,15 +228,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 resY = py - tracebase[i + 1].Y;
                 sumbase = sumbase + Math.Sqrt(resX * resX + resY * resY);
             }
-            for (int i = 0; i < tracebase.Count - 1; i++)
+            for (int i = 0; i < tracemid.Count - 2; i++)
             {
                 px = tracemid[i].X;
                 py = tracemid[i].Y;
-                resX = px - tracemid[i+1].X;
-                resY = py - tracemid[i+1].Y;
+                resX = px - tracemid[i + 1].X;
+                resY = py - tracemid[i + 1].Y;
                 summid = summid + Math.Sqrt(resX * resX + resY * resY);
             }
-            if (sumbase > summid)
+            if (sumbase < summid)
             {
                 return tracebase;
             }
@@ -262,12 +254,16 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="world">Игровой мир</param>
         /// <param name="game">Константы игры</param>
         /// <param name="self">Собственный маг</param>
-        public void goTo(Point2D point, World world, Game game, Wizard self)
+        /// <param name="move">Управление магом</param>
+        public void goTo(Point2D point, World world, Game game, Wizard self,Move move)
         {
             List<LinePoint> trace = new List<LinePoint>();
             trace = getTrace(point, world, game, self);
-
-            double angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+            if (self.GetDistanceTo(trace[0].X,trace[1].Y)<40)
+            {
+                trace.RemoveAt(0);
+            }
+            double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
 
             move.Turn = angle;
 
@@ -327,3 +323,4 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
     }
 }
+
