@@ -45,7 +45,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 case 5:
                 case 9:
                 case 10:
-                    HotZone = new Point2D(3500,500);
+                    HotZone = new Point2D(3500, 500);
                     break;
             }
 
@@ -53,6 +53,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             LivingUnit nearestBuilding = getNearestBuilding(world, self);
 
             Point2D myBase = getMyBase(self);
+            Point2D enemyBase = getEnemyBase(self);
 
             if (self.Life < self.MaxLife * lowHPFactor)
             {
@@ -64,7 +65,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
                     if (distance <= self.CastRange)
                     {
-                        HotZone = new Point2D(nearestTarget.X,nearestTarget.Y);
+                        HotZone = new Point2D(nearestTarget.X, nearestTarget.Y);
                     }
                 }
             }
@@ -88,6 +89,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     case 10:
                         HotZone = new Point2D(3500, 500);
                         break;
+                }
+                if (nearestTarget == null)
+                {
+                    HotZone = enemyBase;
                 }
             }
             return HotZone;
@@ -196,7 +201,23 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return myBase;
         }
-
-
+        /// <summary>
+        /// Возвращает координату вражеской базы
+        /// </summary>
+        /// <param name="self"></param>
+        /// <returns></returns>
+        private Point2D getEnemyBase(Wizard self)
+        {
+            Point2D enemyBase;
+            if (self.Faction == Faction.Academy)
+            {
+                enemyBase = new Point2D(3500, 3500);
+            }
+            else
+            {
+                enemyBase = new Point2D(500, 500);
+            }
+            return enemyBase;
+        }
     }
 }
