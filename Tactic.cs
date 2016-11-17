@@ -147,7 +147,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="targetUnit">Выбранная цель</param>
         /// <param name="move">Управление магом</param>
         public void getRocket(World world, Game game, Wizard self, LivingUnit targetUnit, Move move)
-        { 
+        {
             //обработка ошибок
             //или проверка всех входящих коллекций и объектов на null
             if(targetUnit.GetDistanceTo(targetUnit)<=self.CastRange)
