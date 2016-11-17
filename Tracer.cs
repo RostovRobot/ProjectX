@@ -161,13 +161,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         {
             List<LinePoint> FullWayPoint = new List<LinePoint>();
             //line0
-            FullWayPoint.Add(new LinePoint(200, 3200, 0, 0));
+            FullWayPoint.Add(new LinePoint(200, 3400, 0, 0));
             FullWayPoint.Add(new LinePoint(200, 2600, 0, 1));
             FullWayPoint.Add(new LinePoint(200, 1700, 0, 2));
             FullWayPoint.Add(new LinePoint(400, 400, 0, 3));
             FullWayPoint.Add(new LinePoint(1700, 200, 0, 4));
             FullWayPoint.Add(new LinePoint(2600, 200, 0, 5));
-            FullWayPoint.Add(new LinePoint(3200, 200, 0, 6));
+            FullWayPoint.Add(new LinePoint(3400, 200, 0, 6));
             //line1
             FullWayPoint.Add(new LinePoint(600, 3400, 1, 0));
             FullWayPoint.Add(new LinePoint(1100, 2900, 1, 1));
@@ -177,13 +177,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(2900, 1100, 1, 5));
             FullWayPoint.Add(new LinePoint(3400, 600, 1, 6));
             //line2
-            FullWayPoint.Add(new LinePoint(800, 3800, 2, 0));
+            FullWayPoint.Add(new LinePoint(600, 3800, 2, 0));
             FullWayPoint.Add(new LinePoint(1400, 3800, 2, 1));
             FullWayPoint.Add(new LinePoint(2300, 3800, 2, 2));
             FullWayPoint.Add(new LinePoint(3600, 3600, 2, 3));
             FullWayPoint.Add(new LinePoint(3800, 2300, 2, 4));
             FullWayPoint.Add(new LinePoint(3800, 1400, 2, 5));
-            FullWayPoint.Add(new LinePoint(3800, 800, 2, 6));
+            FullWayPoint.Add(new LinePoint(3800, 600, 2, 6));
             return FullWayPoint;
         }
 
@@ -259,11 +259,29 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         {
             List<LinePoint> trace = new List<LinePoint>();
             trace = getTrace(point, world, game, self);
-            if (self.GetDistanceTo(trace[0].X,trace[1].Y)<40)
+            int i = 0;
+            double angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+            double px = trace[0].X;
+            double py = trace[0].Y;
+            double resX = px - trace[1].Y;
+            double resY = py - trace[1].X;
+            double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
+            if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
             {
-                trace.RemoveAt(0);
+                i = 1;
             }
-            double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+            if (i == 1)
+            {
+                angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+                if (self.GetDistanceTo(trace[0].X, trace[0].Y) >= res/2)
+                {
+                    i = 0;
+                }
+            }
+            else
+            {
+                angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+            }
 
             move.Turn = angle;
 
