@@ -125,7 +125,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
         }
-        
+
 
 
 
@@ -148,27 +148,28 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="move">Управление магом</param>
         public void getRocket(World world, Game game, Wizard self, LivingUnit targetUnit, Move move)
         {
-            //обработка ошибок
-            //или проверка всех входящих коллекций и объектов на null
-            if(targetUnit.GetDistanceTo(targetUnit)<=self.CastRange)
+            if (targetUnit != null)
             {
-                double angle = self.GetAngleTo(targetUnit);
-                move.Turn = angle;
-                
-                if(Math.Abs(angle)<=self.VisionRange)
-                {
-                    move.Action = ActionType.MagicMissile;
-                    move.CastAngle = angle;
-                    move.MinCastDistance = self.GetDistanceTo(targetUnit) + self.Radius - targetUnit.Radius;
-                }
 
+                if (targetUnit.GetDistanceTo(targetUnit) <= self.CastRange)
+                {
+                    double angle = self.GetAngleTo(targetUnit);
+                    move.Turn = angle;
+
+                    if (Math.Abs(angle) <= self.VisionRange)
+                    {
+                        move.Action = ActionType.MagicMissile;
+                        move.CastAngle = angle;
+                        move.MinCastDistance = self.GetDistanceTo(targetUnit) + self.Radius - targetUnit.Radius;
+                    }
+
+
+                }
 
             }
 
+
         }
-
-
-
 
     }
 }

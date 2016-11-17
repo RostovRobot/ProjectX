@@ -12,7 +12,6 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        private LaneType lane; // переменная в которую задаем нашу линию
         /*private Wizard self;
         private World world;
         private Game game;
@@ -29,9 +28,30 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <returns>Точка на двухмерной карте</returns>
         public Point2D getHotZone(World world, Game game, Wizard self)
         {
-            Point2D HotZone = new Point2D(world.Width / 2, world.Height/2);
+            Point2D HotZone = new Point2D();
+            switch ((int)self.Id)
+            {
+                case 1:
+                case 2:
+                case 6:
+                case 7:
+                    HotZone = new Point2D(500, 3500);
+                    break;
+                case 3:
+                case 8:
+                    HotZone = new Point2D(2000, 2000);
+                    break;
+                case 4:
+                case 5:
+                case 9:
+                case 10:
+                    HotZone = new Point2D(3500,500);
+                    break;
+            }
+
             LivingUnit nearestTarget = getNearestTarget(world, self);
             LivingUnit nearestBuilding = getNearestBuilding(world, self);
+
             Point2D myBase = getMyBase(self);
 
             if (self.Life < self.MaxLife * lowHPFactor)
@@ -50,7 +70,25 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             else
             {
-                HotZone = new Point2D(2000, 2000);
+                switch ((int)self.Id)
+                {
+                    case 1:
+                    case 2:
+                    case 6:
+                    case 7:
+                        HotZone = new Point2D(500, 3500);
+                        break;
+                    case 3:
+                    case 8:
+                        HotZone = new Point2D(2000, 2000);
+                        break;
+                    case 4:
+                    case 5:
+                    case 9:
+                    case 10:
+                        HotZone = new Point2D(3500, 500);
+                        break;
+                }
             }
             return HotZone;
         }
@@ -158,5 +196,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return myBase;
         }
+
+
     }
 }

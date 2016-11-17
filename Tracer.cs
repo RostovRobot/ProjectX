@@ -13,7 +13,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Tracer
     {
         private double WAYPOINT_RADIUS = 100.0D;
-          
+
         private Wizard self;
         private World world;
         private Game game;
@@ -26,7 +26,6 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="game">Константы игры</param>
         /// <param name="self">Собственный маг</param>
         /// <returns>Объект-движение</returns>
-        /// private void initializeTick(Wizard self, World world, Game game, Move move)
         private void initializeTick(Wizard self, World world, Game game, Move move)
         {
             this.self = self;
@@ -34,200 +33,237 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             this.game = game;
             this.move = move;
         }
-        public List<LinePoint> TracerBase(List<LinePoint> points, LinePoint needPoint)
+
+
+
+
+        /// <summary>
+        /// Получение маршрута от точки к точке, через центр либо базу
+        /// </summary>
+        /// <param name="points">Список точек</param>
+        /// <param name="needPoint2D">Точка, на которую надо прийти</param>
+        /// <param name="transition">Индекс для перехода по линиям</param>
+        /// <returns>Список вэйпоинтов для пути</returns>
+        public List<LinePoint> tracerGet(List<LinePoint> points, Point2D needPoint2D, int transition, Wizard self)
         {
 
-            //List<LinePoint>[] FullWaypoints = new List<LinePoint>[3];
-            int CenterLinePoint = 3;
+            List<LinePoint>[] FullWaypoints = new List<LinePoint>[3];
+            for (int i = 0; i < 3; i++)
+                FullWaypoints[i] = new List<LinePoint>();
+            for (int i = 0; i < points.Count; i++)
+            {
+                FullWaypoints[points[i].line].Add(points[i]);
+
+            }
             List<LinePoint> Waypoints = new List<LinePoint>();
-            double Min = 2000;
-            double Minf = 0;
+            double SMin = 2000;
+            double SMinf = 0;
+            double NMin = 2000;
+            double NMinf = 0;
             int NearestPoint = 0;
-            for (int i = 0; i < points.Count-1; i++)
+            int NearestPointLine = 0;
+            LinePoint needPoint;
+            int ineedPoint = 0;
+            for (int i = 0; i < points.Count; i++)
             {
                 double px = points[i].X;
                 double py = points[i].Y;
-                double resX = px-self.X;
-                double resY = py-self.Y;
-                Minf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
-                if (Min>Minf)
+                double resX = px - self.X;
+                double resY = py - self.Y;
+                SMinf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
+                if (SMin > SMinf)
                 {
-                    Min = Minf;
+                    SMin = SMinf;
                     NearestPoint = i;
                 }
             }
-
-            if(points[NearestPoint].line != needPoint.line)//
+            for (int i = 0; i < points.Count; i++)
             {
-                if (points[NearestPoint].index != CenterLinePoint)
+                double px = points[i].X;
+                double py = points[i].Y;
+                double resX = px - needPoint2D.getX();
+                double resY = py - needPoint2D.getY();
+                NMinf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
+                if (NMin > NMinf)
                 {
-                    if (points[NearestPoint].index < CenterLinePoint)
+                    NMin = NMinf;
+                    ineedPoint = i;
+                }
+            }
+            needPoint = points[ineedPoint];
+
+
+            NearestPointLine = points[NearestPoint].line;
+            if (NearestPointLine == needPoint.line)
+            {
+                if (points[NearestPoint].index <= needPoint.index)
+                {
+                    for (int i = points[NearestPoint].index; i <= needPoint.index; i++)
                     {
-                        for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
-                        {
-                            Waypoints.Add(points[i]);
-                        }
-                        Waypoints.Add(points[CenterLinePoint]);//line1
-                        if (needPoint.line == 0)
-                        {
-                            Waypoints.Add(points[CenterLinePoint]);//line0
-                            if (points[NearestPoint].index < CenterLinePoint)//needpoint
-                            {
-                                for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)//i--     (i=3;i>=цели;i--)
-                                {
-                                    Waypoints.Add(points[i]);
-                                }
-                            }
-                            if (points[NearestPoint].index > CenterLinePoint)
-                            {
-                                for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)//(i=3;i<=цели;i++)
-                                {
-                                    Waypoints.Add(points[i]);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if (needPoint.line == 0)
-                            {
-                                Waypoints.Add(points[CenterLinePoint]);//line2
-                                if (points[NearestPoint].index < CenterLinePoint)//need
-                                {
-                                    for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
-                                    {
-                                        Waypoints.Add(points[i]);
-                                    }
-                                }
-                                else
-                                {
-                                    for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)
-                                    {
-                                        Waypoints.Add(points[i]);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Waypoints.Add(points[CenterLinePoint]);
-                                if (points[NearestPoint].index < CenterLinePoint)
-                                {
-                                    for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
-                                    {
-                                        Waypoints.Add(points[i]);
-                                    }
-                                }
-                                else
-                                {
-                                    for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)
-                                    {
-                                        Waypoints.Add(points[i]);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)
-                        {
-                            Waypoints.Add(points[i]);
-                        }
-                        Waypoints.Add(points[CenterLinePoint]);
-                        if (points[NearestPoint].line != needPoint.line)
-                        {
-                            if (points[NearestPoint].index < needPoint.index)
-                            {
-                                for (int i = points[NearestPoint].index; i <= needPoint.index; i++)
-                                {
-                                    Waypoints.Add(points[i]);
-                                }
-                            }
-                            else
-                            {
-                                for (int i = points[NearestPoint].index; i >= needPoint.index; i++)
-                                {
-                                    Waypoints.Add(points[i]);
-                                }
-                            }
-                        }
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
                 else
                 {
-                    Waypoints.Add(points[CenterLinePoint]);
-                    if (needPoint.line == 0)
+                    for (int i = points[NearestPoint].index; i >= needPoint.index; i--)
                     {
-                        Waypoints.Add(points[CenterLinePoint]);
-                        if (points[NearestPoint].index < CenterLinePoint)
-                        {
-                            for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
-                            {
-                                Waypoints.Add(points[i]);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)
-                            {
-                                Waypoints.Add(points[i]);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Waypoints.Add(points[CenterLinePoint]);
-                        if (points[NearestPoint].index < CenterLinePoint)
-                        {
-                            for (int i = points[NearestPoint].index; i <= CenterLinePoint; i++)
-                            {
-                                Waypoints.Add(points[i]);
-                            }
-                        }
-                        else
-                        {
-                            for (int i = points[NearestPoint].index; i >= CenterLinePoint; i++)
-                            {
-                                Waypoints.Add(points[i]);
-                            }
-                        }
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
             }
             else
             {
-                if (points[NearestPoint].index < needPoint.index)
+                if (points[NearestPoint].index < transition)
                 {
-                    for (int i = points[NearestPoint].index; i <= needPoint.index; i++)
+                    for (int i = points[NearestPoint].index; i <= transition; i++)
                     {
-                        Waypoints.Add(points[i]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
                     }
                 }
                 else
                 {
-                    for (int i = points[NearestPoint].index; i >= needPoint.index; i++)
+                    for (int i = points[NearestPoint].index; i >= transition; i--)
                     {
-                        Waypoints.Add(points[i]);
+                        Waypoints.Add(FullWaypoints[NearestPointLine][i]);
+                    }
+                }
+
+
+              
+                if (needPoint.line != 1)
+                    Waypoints.Add(FullWaypoints[1][transition]);  
+                if (points[transition].index <= needPoint.index)
+                {
+                    for (int i = transition; i <= needPoint.index; i++)
+                    {
+                        Waypoints.Add(FullWaypoints[needPoint.line][i]);
+                    }
+                }
+                else
+                {
+                    for (int i = points[transition].index; i >= needPoint.index; i--)
+                    {
+                        Waypoints.Add(FullWaypoints[needPoint.line][i]);
                     }
                 }
             }
             return Waypoints;
         }
 
-        public void TraceMid()
+
+
+        /// <summary>
+        /// Создание списка точек
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <returns>Список точек</returns>
+        public List<LinePoint> getPointMap(World world)
         {
-            //return;
+            List<LinePoint> FullWayPoint = new List<LinePoint>();
+            //line0
+            FullWayPoint.Add(new LinePoint(200, 3200, 0, 0));
+            FullWayPoint.Add(new LinePoint(200, 2600, 0, 1));
+            FullWayPoint.Add(new LinePoint(200, 1700, 0, 2));
+            FullWayPoint.Add(new LinePoint(400, 400, 0, 3));
+            FullWayPoint.Add(new LinePoint(1700, 200, 0, 4));
+            FullWayPoint.Add(new LinePoint(2600, 200, 0, 5));
+            FullWayPoint.Add(new LinePoint(3200, 200, 0, 6));
+            //line1
+            FullWayPoint.Add(new LinePoint(600, 3400, 1, 0));
+            FullWayPoint.Add(new LinePoint(1100, 2900, 1, 1));
+            FullWayPoint.Add(new LinePoint(1600, 2400, 1, 2));
+            FullWayPoint.Add(new LinePoint(2000, 2000, 1, 3));
+            FullWayPoint.Add(new LinePoint(2400, 1600, 1, 4));
+            FullWayPoint.Add(new LinePoint(2900, 1100, 1, 5));
+            FullWayPoint.Add(new LinePoint(3400, 600, 1, 6));
+            //line2
+            FullWayPoint.Add(new LinePoint(800, 3800, 2, 0));
+            FullWayPoint.Add(new LinePoint(1400, 3800, 2, 1));
+            FullWayPoint.Add(new LinePoint(2300, 3800, 2, 2));
+            FullWayPoint.Add(new LinePoint(3600, 3600, 2, 3));
+            FullWayPoint.Add(new LinePoint(3800, 2300, 2, 4));
+            FullWayPoint.Add(new LinePoint(3800, 1400, 2, 5));
+            FullWayPoint.Add(new LinePoint(3800, 800, 2, 6));
+            return FullWayPoint;
         }
 
 
-        public Move getTrace(Point2D point, World world, Game game, Wizard self)
-        {
 
-            return new Move();
+
+
+
+        /// <summary>
+        /// Выбор пути через базу или центер
+        /// </summary>
+        /// <param name="point">Точка, в которую надо прийти</param>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Путь, состоящий из вэйпоинтов</returns>
+        public List<LinePoint> getTrace(Point2D point, World world, Game game, Wizard self)
+        {
+            List<LinePoint> FullWayPoint;
+            List<LinePoint> tracebase;
+            FullWayPoint = getPointMap(world);
+            if (self.Faction == Faction.Academy)
+            {
+                tracebase = tracerGet(FullWayPoint, point, 0, self);
+            }
+            else
+            {
+                tracebase = tracerGet(FullWayPoint, point, 6, self);
+            }
+            List<LinePoint> tracemid = tracerGet(FullWayPoint, point, 3, self);
+            double summid = 0;
+            double sumbase = 0;
+            double px = 0;
+            double py = 0;
+            double resX = 0;
+            double resY = 0;
+            for (int i = 0; i < tracebase.Count - 2; i++)
+            {
+                px = tracebase[i].X;
+                py = tracebase[i].Y;
+                resX = px - tracebase[i + 1].X;
+                resY = py - tracebase[i + 1].Y;
+                sumbase = sumbase + Math.Sqrt(resX * resX + resY * resY);
+            }
+            for (int i = 0; i < tracemid.Count - 2; i++)
+            {
+                px = tracemid[i].X;
+                py = tracemid[i].Y;
+                resX = px - tracemid[i + 1].X;
+                resY = py - tracemid[i + 1].Y;
+                summid = summid + Math.Sqrt(resX * resX + resY * resY);
+            }
+            if (sumbase < summid)
+            {
+                return tracebase;
+            }
+            else
+            {
+                return tracemid;
+            }
         }
 
-        /*private void goTo(Point2D point)
+
+        /// <summary>
+        /// Передвижение
+        /// </summary>
+        /// <param name="point">Класс, описывающий точку на карте</param>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <param name="move">Управление магом</param>
+        public void goTo(Point2D point, World world, Game game, Wizard self,Move move)
         {
-            double angle = self.GetAngleTo(point.X, point.Y);
+            List<LinePoint> trace = new List<LinePoint>();
+            trace = getTrace(point, world, game, self);
+            if (self.GetDistanceTo(trace[0].X,trace[1].Y)<40)
+            {
+                trace.RemoveAt(0);
+            }
+            double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
 
             move.Turn = angle;
 
@@ -235,7 +271,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 move.Speed = game.WizardForwardSpeed;
             }
-        }*/
+        }
 
         /*private Point2D NextWaypoint()
         {
@@ -279,5 +315,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return firstWaypoint;
         }*/
+
+
+
+
+
+
     }
 }
+
