@@ -7,11 +7,13 @@ using Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk.Model;
 
 namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
+
     /// <summary>
     /// Класс, описывающий тактические приемы при встрече с врагом
     /// </summary>
     class Tactic
     {
+        
         /// <summary>
         /// Выбор тактических приемов
         /// </summary>
@@ -23,14 +25,52 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
+            if(IsZalip(world,game,self,move))
+            {
+                //Вызываем отход
+
+            }
             getRocket(world, game, self, getMostImportantTarget(getTargets(world, self), self), move);
+
             return move;
             
 
             //return new Move();
         }
+        int ZalipCount=0;
+        double LastX=0;
+        double LastY=0;
+        int TimeInZalip = 30;
 
-        
+        public bool IsZalip(World world, Game game, Wizard self, Move move)
+        {
+            double speed = Math.Sqrt(self.SpeedX*self.SpeedX + self.SpeedY * self.SpeedY);
+            if(speed>0)
+            {
+                double dist = GetDistance(self.X, self.Y, LastX, LastY);
+                if(dist<speed/10)
+                {
+                    ZalipCount++;
+
+                }
+                else
+                {
+                    ZalipCount = 0;
+                }
+
+            }
+            LastX = self.X;
+            LastY = self.Y;
+            if(ZalipCount> TimeInZalip)
+            {
+                ZalipCount = 0;
+                return true;
+
+            }
+            return false;
+        }
+
+               
         public LivingUnit getMostImportantTarget(List<LivingUnit> targets,Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
         {
             double mindist = double.MaxValue;
