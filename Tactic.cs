@@ -13,7 +13,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tactic
     {
-        
+        public Point2D ZalipP = new Point2D(10000,10000);
+        public int controlZalipDistance = 30;
         /// <summary>
         /// Выбор тактических приемов
         /// </summary>
@@ -25,9 +26,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
-            if(IsZalip(world,game,self,move))
+            if((IsZalip(world,game,self,move))||(self.GetDistanceTo(ZalipP.getX(),ZalipP.getY())<controlZalipDistance))
             {
-                //Вызываем отход
+                move.Speed = game.WizardBackwardSpeed;
 
             }
             getRocket(world, game, self, getMostImportantTarget(getTargets(world, self), self), move);
@@ -55,9 +56,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 }
                 else
                 {
+                    
                     ZalipCount = 0;
                 }
 
+            }
+            else
+            {
+                 ZalipP = new Point2D(self.X, self.Y);
             }
             LastX = self.X;
             LastY = self.Y;
@@ -210,6 +216,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
         }
+
+        
 
     }
 }
