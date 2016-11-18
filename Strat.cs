@@ -114,9 +114,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Метод возвращает ближайшую вражескую цель для атаки
         /// </summary>
-        /// <param name="world"></param>
-        /// <param name="self"></param>
-        /// <returns></returns>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Живой юнит для атаки</returns>
         private LivingUnit getNearestTarget(World world, Wizard self)
         {
             List<LivingUnit> targets = new List<LivingUnit>();
@@ -156,6 +156,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Возвращает ближайшую союзную постройку
         /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="self">Собственный маг</param>
         /// <returns></returns>
         private LivingUnit getNearestBuilding(World world, Wizard self)
         {
@@ -204,7 +206,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Возвращает координату вражеской базы
         /// </summary>
-        /// <param name="self"></param>
+        /// <param name="self">Собственный маг</param>
         /// <returns></returns>
         private Point2D getEnemyBase(Wizard self)
         {

@@ -20,8 +20,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// Номер точки на линии.
         /// </summary>
         public int index;
+
+        /// <summary>
+        /// Координата X
+        /// </summary>
         public double X;
 
+        /// <summary>
+        /// Координата Y
+        /// </summary>
         public double Y;
 
         /// <summary>
@@ -54,6 +61,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             this.line = line;
         }
 
+        /// <summary>
+        /// Метод конструктор без параметров
+        /// </summary>
         public LinePoint()
         {
             X = 0;
