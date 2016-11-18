@@ -12,8 +12,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tracer
     {
-        private double WAYPOINT_RADIUS = 100.0D;
-
+       
         private Wizard self;
         private World world;
         private Game game;
@@ -246,7 +245,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
         }
 
-
+        public int i = 0; //i-логическая переменная
         /// <summary>
         /// Передвижение
         /// </summary>
@@ -259,37 +258,94 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         {
             List<LinePoint> trace = new List<LinePoint>();
             trace = getTrace(point, world, game, self);
-            int i = 0;
-            double angle = self.GetAngleTo(trace[1].X, trace[1].Y);
-            double px = trace[0].X;
-            double py = trace[0].Y;
-            double resX = px - trace[1].Y;
-            double resY = py - trace[1].X;
-            double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
-            if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
+
+            
+                double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                double px = trace[0].X;
+                double py = trace[0].Y;
+            if (trace.Count > 1)
             {
-                i = 1;
-            }
-            if (i == 1)
-            {
-                angle = self.GetAngleTo(trace[1].X, trace[1].Y);
-                if (self.GetDistanceTo(trace[0].X, trace[0].Y) >= res/2)
+                if (isCrash(self) == true)
                 {
-                    i = 0;
+                    CrashedMove(move, self, game);
                 }
+                else
+                {
+                    double resX = px - trace[1].Y;
+                    double resY = py - trace[1].X;
+                    double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
+
+                    if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
+                    {
+                        i = 1;
+                    }
+                    if (i == 1)
+                    {
+                        angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+                        if (self.GetDistanceTo(trace[0].X, trace[0].Y) >= res / 2)
+                        {
+                            i = 0;
+                        }
+                    }
+                    else
+                    {
+                        angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                    }
+
+                    move.Turn = angle;
+
+                    if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                    {
+                        move.Speed = game.WizardForwardSpeed;
+                    }
+                }
+            }
+        }
+
+        private int steps = 0;
+        private double oldX = 0;
+        private double oldY = 0;
+        public int ago = 30;
+        private int deltaPorog = 70;  //подобрать
+        private int stepsPorog = 80;  //подобрать
+        public bool isCrash(Wizard self)
+        {
+            double deltaX = self.X - oldX;
+            double deltaY = self.Y - oldY;
+            double delta = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (delta < deltaPorog)
+            {
+                steps++;
             }
             else
             {
-                angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                steps = 0;
+                oldX = self.X;
+                oldY = self.Y;
             }
-
-            move.Turn = angle;
-
-            if (Math.Abs(angle) < game.StaffSector / 4.0D)
+            
+            if (steps > stepsPorog || ago != 0)
             {
-                move.Speed = game.WizardForwardSpeed;
+                if (ago == 0)
+                {
+                    ago = 30;
+                }
+                ago = ago - 1;
+                return true;
+
+            }
+            else
+            {
+                return false;
             }
         }
+
+        public void CrashedMove(Move move, Wizard self,Game game)
+        {
+                move.Speed = - game.WizardForwardSpeed;
+        }
+
 
         /*private Point2D NextWaypoint()
         {

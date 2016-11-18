@@ -68,7 +68,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             hotZone = myStrat.getHotZone(world, game, self);
 
-            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > 100)
+            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > 80)
             {
                 myTracer.goTo(hotZone, world, game, self, move);
             } else
