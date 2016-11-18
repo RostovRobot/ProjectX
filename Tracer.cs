@@ -300,6 +300,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     }
                 }
             }
+            else
+            {
+                move.Turn = angle;
+
+                if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                {
+                    move.Speed = game.WizardForwardSpeed;
+                }
+            }
         }
 
         private int steps = 0;
