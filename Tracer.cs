@@ -43,7 +43,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="points">Список точек</param>
         /// <param name="needPoint2D">Точка, на которую надо прийти</param>
         /// <param name="transition">Индекс для перехода по линиям</param>
-        /// <returns>Список вэйпоинтов для пути</returns>
+        /// <returns>Список вэйпоинтов для пути в виде коллекции</returns>
         public List<LinePoint> tracerGet(List<LinePoint> points, Point2D needPoint2D, int transition, Wizard self)
         {
 
@@ -156,7 +156,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// Создание списка точек
         /// </summary>
         /// <param name="world">Игровой мир</param>
-        /// <returns>Список точек</returns>
+        /// <returns>Список точек в виде коллекции</returns>
         public List<LinePoint> getPointMap(World world)
         {
             List<LinePoint> FullWayPoint = new List<LinePoint>();
@@ -193,7 +193,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
         /// <summary>
-        /// Выбор пути через базу или центер
+        /// Выбор пути через базу или центр
         /// </summary>
         /// <param name="point">Точка, в которую надо прийти</param>
         /// <param name="world">Игровой мир</param>

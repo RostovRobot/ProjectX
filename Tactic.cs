@@ -13,8 +13,16 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tactic
     {
-        public Point2D ZalipP = new Point2D(10000,10000);
+        /// <summary>
+        /// Точка для проверки на залипание
+        /// </summary>
+        public Point2D ZalipP = new Point2D(10000, 10000);
+
+        /// <summary>
+        /// Пороговое значение счетчика тиков на залипание
+        /// </summary>
         public int controlZalipDistance = 30;
+
         /// <summary>
         /// Выбор тактических приемов
         /// </summary>
@@ -26,7 +34,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
-            if((IsZalip(world,game,self,move))||(self.GetDistanceTo(ZalipP.getX(),ZalipP.getY())<controlZalipDistance))
+            if ((IsZalip(world, game, self, move)) || (self.GetDistanceTo(ZalipP.getX(), ZalipP.getY()) < controlZalipDistance))
             {
                 move.Speed = game.WizardBackwardSpeed;
 
@@ -34,40 +42,46 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             getRocket(world, game, self, getMostImportantTarget(getTargets(world, self), self), move);
 
             return move;
-            
+
 
             //return new Move();
         }
-        int ZalipCount=0;
-        double LastX=0;
-        double LastY=0;
+        int ZalipCount = 0;
+        double LastX = 0;
+        double LastY = 0;
         int TimeInZalip = 30;
 
+        /// <summary>
+        /// Определение "залипания" мага
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <param name="move">Управление магом</param>
+        /// <returns>Залип ли маг?</returns>
         public bool IsZalip(World world, Game game, Wizard self, Move move)
         {
-            double speed = Math.Sqrt(self.SpeedX*self.SpeedX + self.SpeedY * self.SpeedY);
-            if(speed>0)
+            double speed = Math.Sqrt(self.SpeedX * self.SpeedX + self.SpeedY * self.SpeedY);
+            if (speed > 0)
             {
                 double dist = GetDistance(self.X, self.Y, LastX, LastY);
-                if(dist<speed/10)
+                if (dist < speed / 10)
                 {
                     ZalipCount++;
 
-                }
-                else
+                } else
                 {
-                    
+
                     ZalipCount = 0;
                 }
 
-            }
-            else
+            } else
             {
-                 ZalipP = new Point2D(self.X, self.Y);
+                ZalipP = new Point2D(self.X, self.Y);
             }
             LastX = self.X;
             LastY = self.Y;
-            if(ZalipCount> TimeInZalip)
+            if (ZalipCount > TimeInZalip)
             {
                 ZalipCount = 0;
                 return true;
@@ -76,18 +90,23 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return false;
         }
 
-               
-        public LivingUnit getMostImportantTarget(List<LivingUnit> targets,Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
+        /// <summary>
+        /// Определение наиболее приоритетной цели для атаки
+        /// </summary>
+        /// <param name="targets">Коллекция целей</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Приоритетная цель в формате живого юнита</returns>
+        public LivingUnit getMostImportantTarget(List<LivingUnit> targets, Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
         {
             double mindist = double.MaxValue;
 
-            Wizard targetwizard=null;
+            Wizard targetwizard = null;
             foreach (var wizard in targets)
             {
                 if (wizard is Wizard)
                 {
                     double distance = GetDistance(self.X, self.Y, wizard.X, wizard.Y);
-                    if (distance<mindist)
+                    if (distance < mindist)
                     {
                         mindist = distance;
                         targetwizard = wizard as Wizard;
@@ -97,14 +116,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             if (targetwizard != null) { return targetwizard; }
 
-            Building targetBuild=null;
+            Building targetBuild = null;
 
             foreach (var build in targets)
             {
-                if(build is Building)
+                if (build is Building)
                 {
                     double distance = GetDistance(self.X, self.Y, build.X, build.Y);
-                    if(distance<mindist)
+                    if (distance < mindist)
                     {
                         mindist = distance;
                         targetBuild = build as Building;
@@ -119,10 +138,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             foreach (var minion in targets)
             {
-                if(minion is Minion)
+                if (minion is Minion)
                 {
                     double distance = GetDistance(self.X, self.Y, minion.X, minion.Y);
-                    if(distance<mindist)
+                    if (distance < mindist)
                     {
                         mindist = distance;
                         targetminion = minion as Minion;
@@ -134,27 +153,33 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
         }
 
+        /// <summary>
+        /// Определение доступных целей для атаки
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Коллекция доступных целей</returns>
         public List<LivingUnit> getTargets(World world, Wizard self)//0-Волшебники,1-миньоны, 2-строения
         {
             List<LivingUnit> targets = new List<LivingUnit>();
-            
+
             foreach (var wizard in world.Wizards)
             {
-                if(wizard.Faction!=self.Faction)
+                if (wizard.Faction != self.Faction)
                 { targets.Add(wizard); }
             }
 
-            
+
             foreach (var build in world.Buildings)
             {
                 if (build.Faction != self.Faction)
                 { targets.Add(build); }
             }
 
-            
+
             foreach (var minion in world.Minions)
             {
-                if( (minion.Faction != self.Faction)&&(minion.Faction!=Faction.Neutral))
+                if ((minion.Faction != self.Faction) && (minion.Faction != Faction.Neutral))
                 { targets.Add(minion); }
             }
 
@@ -162,8 +187,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
 
 
-
-        public double GetDistance(double X1,double Y1,double X2,double Y2)
+        /// <summary>
+        /// Определение дистанции
+        /// </summary>
+        /// <param name="X1">Координата X первой точки</param>
+        /// <param name="Y1">Координата Y первой точки</param>
+        /// <param name="X2">Координата X второй точки</param>
+        /// <param name="Y2">Координата Y второй точки</param>
+        /// <returns>Дистанция в формате дробного числа</returns>
+        public double GetDistance(double X1, double Y1, double X2, double Y2)
         {
             return Math.Sqrt((X2 - X1) * (X2 - X1) + (Y2 - Y1) * (Y2 - Y1));
 
@@ -177,6 +209,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
         //
+        //*******************************************************************************************************************************************************************************************
         //Некое разделение областей работы. Ниже будут описаны действия, используемые в тактике.
         //
 
@@ -217,7 +250,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
         }
 
-        
+
 
     }
 }
