@@ -4,7 +4,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
     public sealed class MyStrategy : IStrategy
     {
-        const int TACTIC_POROG = 80;
+        const int TACTIC_POROG = 600;
         Strat myStrat = new Strat();
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
@@ -82,13 +82,22 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
             vc.Circle(self.X, self.Y, TACTIC_POROG, 1.0f, 0.0f, 1.0f);
-            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > TACTIC_POROG)
+
+            LivingUnit nearestTarget = myTactic.getNearlestTarget(myTactic.getTargets(world, self), self);
+            double nearestTargetDistance=world.Height;
+            if (nearestTarget != null)
+            {
+                nearestTargetDistance = self.GetDistanceTo(nearestTarget);
+            }
+            if (nearestTargetDistance>TACTIC_POROG && self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > TACTIC_POROG)
             {
                 //myTracer.goTo(hotZone, world, game, self, move);
                 myTracer.goToVisual(hotZone, world, game, self, move, vc);
+                vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
             } else
             {
                 myTactic.getTacticMove(world, game, self, move);
+                vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
             }
 
             //вызываем метод getHotZone у объекта-стратегии
