@@ -8,6 +8,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
         Point2D hotZone = new Point2D();
+
+        //ÓÄÀËÈÒÜ ÏÅÐÅÄ ÄÅÏËÎÈÒÎÌ!!!!!
+        VisualClient vc = new VisualClient("localhost", 13579);
+
+
         public void Move(Wizard self, World world, Game game, Move move)
         {
             #region
@@ -67,6 +72,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
             hotZone = myStrat.getHotZone(world, game, self);
+
+            if(hotZone!=null)
+            {
+                vc.BeginPost();
+                vc.Line(self.X, self.Y, hotZone.getX(), hotZone.getY(), 1.0f, 0.0f, 0.0f);
+                vc.EndPost();
+            }
 
             if (/*óñëîâèå íàëè÷èå âðàãà èëè íàñ â hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > 80)
             {

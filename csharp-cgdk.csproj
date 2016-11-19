@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Debug.cs" />
     <Compile Include="LinePoint.cs" />
     <Compile Include="Model\ActionType.cs" />
     <Compile Include="Model\Bonus.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Tactic.cs" />
     <Compile Include="TacticType.cs" />
     <Compile Include="Tracer.cs" />
+    <Compile Include="VisualClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
