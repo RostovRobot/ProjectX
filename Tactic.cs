@@ -180,6 +180,52 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
 
         /// <summary>
+        /// Посик ближайшего врага
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Ближайший враг</returns>
+        public LivingUnit getNearlestTarget(World world, Wizard self)
+        {
+            double mindist = double.MaxValue;
+            List<LivingUnit> targets = getTargets(world, self);
+            LivingUnit target = null;
+            foreach (var elem in targets)
+            {
+
+                double distance = GetDistance(self.X, self.Y, elem.X, elem.Y);
+                if (distance < mindist)
+                {
+                    mindist = distance;
+                    target = elem;
+                }
+
+            }
+
+            //if (targetwizard != null) { return targetwizard; }
+
+
+
+            return target;
+        }
+
+        /// <summary>
+        /// Определение расстояния до ближайшего врага
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Если врагов нет, то возвращает ширину игрового мира</returns>
+        public double getNearestTargetDistance(World world, Wizard self)
+        {
+            LivingUnit target = getNearlestTarget(world, self);
+            double distance = world.Width;
+            if(target!=null)
+            {
+                distance = GetDistance(self.X, self.Y, target.X, target.Y);
+            }
+            return distance;
+        }
+        /// <summary>
         /// Определение доступных целей для атаки
         /// </summary>
         /// <param name="world">Игровой мир</param>

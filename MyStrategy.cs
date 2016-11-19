@@ -1,10 +1,12 @@
 using Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk.Model;
+using System.Collections.Generic;
 
 namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
     public sealed class MyStrategy : IStrategy
     {
-        const int TACTIC_POROG = 600;
+        const int HOT_ZONE_POROG = 80;
+        const int ENEMY_POROG = 600;
         Strat myStrat = new Strat();
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
@@ -81,15 +83,16 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 
             }
 
-            vc.Circle(self.X, self.Y, TACTIC_POROG, 1.0f, 0.0f, 1.0f);
-
-            LivingUnit nearestTarget = myTactic.getNearlestTarget(myTactic.getTargets(world, self), self);
-            double nearestTargetDistance=world.Height;
-            if (nearestTarget != null)
+            vc.Circle(self.X, self.Y, HOT_ZONE_POROG, 1.0f, 1.0f, 0.0f);
+            vc.Circle(self.X, self.Y, ENEMY_POROG, 1.0f, 0.0f, 1.0f);
+            List<LinePoint> MapPoint = myTracer.getPointMap(world);
+            foreach(LinePoint LP in MapPoint)
             {
-                nearestTargetDistance = self.GetDistanceTo(nearestTarget);
+                vc.FillCircle(LP.X, LP.Y, 5, 0.0f, 1.0f, 0.0f);
             }
-            if (nearestTargetDistance>TACTIC_POROG && self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > TACTIC_POROG)
+
+            double nearestTargetDistance = myTactic.getNearestTargetDistance(world, self);
+            if (nearestTargetDistance>ENEMY_POROG && self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > HOT_ZONE_POROG)
             {
                 //myTracer.goTo(hotZone, world, game, self, move);
                 myTracer.goToVisual(hotZone, world, game, self, move, vc);
