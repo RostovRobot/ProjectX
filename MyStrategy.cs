@@ -4,6 +4,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
     public sealed class MyStrategy : IStrategy
     {
+        const int TACTIC_POROG = 80;
         Strat myStrat = new Strat();
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
@@ -64,6 +65,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             //и т.д.
             #endregion
 
+            vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
             if (self.IsMaster)
             {
                 //вызываем метод setKommand у объекта-стратегии
@@ -75,12 +77,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             if(hotZone!=null)
             {
-                vc.BeginPost();
                 vc.Line(self.X, self.Y, hotZone.getX(), hotZone.getY(), 1.0f, 0.0f, 0.0f);
-                vc.EndPost();
+                
             }
 
-            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > 80)
+            vc.Circle(self.X, self.Y, TACTIC_POROG, 0.0f, 1.0f, 1.0f);
+            if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > TACTIC_POROG)
             {
                 myTracer.goTo(hotZone, world, game, self, move);
             } else
@@ -90,6 +92,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             //вызываем метод getHotZone у объекта-стратегии
 
+
+            vc.EndPost(); //заканчиваем отрисовку
         }
     }
 }
