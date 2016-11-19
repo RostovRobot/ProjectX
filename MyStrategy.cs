@@ -1,5 +1,6 @@
 using Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk.Model;
 using System.Collections.Generic;
+using System;
 
 namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 {
@@ -13,8 +14,19 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         Point2D hotZone = new Point2D();
 
         //УДАЛИТЬ ПЕРЕД ДЕПЛОИТОМ!!!!!
-        VisualClient vc = new VisualClient("localhost", 13579);
+        VisualClient vc;
 
+        public void setVisual()
+        {
+            try
+            {
+                vc = new VisualClient("localhost", 13579);
+            }
+            catch (Exception e)
+            {
+
+            }
+        }
 
         public void Move(Wizard self, World world, Game game, Move move)
         {
@@ -67,7 +79,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             //и т.д.
             #endregion
 
-            vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
+            if (world.TickIndex < 1) setVisual();
+
+            if (vc != null)
+            {
+                vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
+            }
             if (self.IsMaster)
             {
                 //вызываем метод setKommand у объекта-стратегии
@@ -77,36 +94,44 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
             hotZone = myStrat.getHotZone(world, game, self);
 
-            if(hotZone!=null)
+            if (vc != null)
             {
-                vc.Line(self.X, self.Y, hotZone.getX(), hotZone.getY(), 1.0f, 0.0f, 0.0f);
-                
-            }
+                if (hotZone != null)
+                {
+                    vc.Line(self.X, self.Y, hotZone.getX(), hotZone.getY(), 1.0f, 0.0f, 0.0f);
 
-            vc.Circle(self.X, self.Y, HOT_ZONE_POROG, 1.0f, 1.0f, 0.0f);
-            vc.Circle(self.X, self.Y, ENEMY_POROG, 1.0f, 0.0f, 1.0f);
-            List<LinePoint> MapPoint = myTracer.getPointMap(world);
-            foreach(LinePoint LP in MapPoint)
-            {
-                vc.FillCircle(LP.X, LP.Y, 5, 0.0f, 1.0f, 0.0f);
+                }
+
+                vc.Circle(self.X, self.Y, HOT_ZONE_POROG, 1.0f, 1.0f, 0.0f);
+                vc.Circle(self.X, self.Y, ENEMY_POROG, 1.0f, 0.0f, 1.0f);
+                List<LinePoint> MapPoint = myTracer.getPointMap(world);
+                foreach (LinePoint LP in MapPoint)
+                {
+                    vc.FillCircle(LP.X, LP.Y, 5, 0.0f, 1.0f, 0.0f);
+                }
             }
 
             double nearestTargetDistance = myTactic.getNearestTargetDistance(world, self);
             if (nearestTargetDistance>ENEMY_POROG && self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > HOT_ZONE_POROG)
             {
-                //myTracer.goTo(hotZone, world, game, self, move);
-                myTracer.goToVisual(hotZone, world, game, self, move, vc);
-                vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
+                if (vc == null)
+                {
+                    myTracer.goTo(hotZone, world, game, self, move);
+                } else
+                {
+                    myTracer.goToVisual(hotZone, world, game, self, move, vc);
+
+                    vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
+                }
             } else
             {
                 myTactic.getTacticMove(world, game, self, move);
-                vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
+                if(vc!=null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
             }
 
             //вызываем метод getHotZone у объекта-стратегии
 
-
-            vc.EndPost(); //заканчиваем отрисовку
+            if(vc!=null) vc.EndPost(); //заканчиваем отрисовку
         }
     }
 }
