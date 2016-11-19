@@ -311,6 +311,90 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
         }
 
+        /// <summary>
+        /// Передвижение с отрисовкой
+        /// </summary>
+        /// <param name="point">Класс, описывающий точку на карте</param>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <param name="move">Управление магом</param>
+        /// <param name="vc">Объект-визуализатор</param>
+        public void goToVisual(Point2D point, World world, Game game, Wizard self, Move move, VisualClient vc)
+        {
+            List<LinePoint> trace = new List<LinePoint>();
+            trace = getTrace(point, world, game, self);
+
+            //отрисовываем все отрезки пути до hotZone
+            int iCount = 0;
+            foreach(LinePoint LP in trace)
+            {
+                double myX1;
+                double myY1;
+                if (iCount < 1)
+                {
+                    myX1 = self.X;
+                    myY1 = self.Y;
+                }else
+                {
+                    myX1 = trace.ElementAt(iCount - 1).X;
+                    myY1 = trace.ElementAt(iCount - 1).Y;
+                }
+                iCount++;
+                double myX2 = LP.X;
+                double myY2 =LP.Y;
+                vc.Line(myX1, myY1, myX2, myY2, 0.0f, 1.0f, 0.0f);
+            }
+
+            double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+            double px = trace[0].X;
+            double py = trace[0].Y;
+            
+            if (trace.Count > 1)
+            {
+                if (isCrash(self) == true)
+                {
+                    CrashedMove(move, self, game);
+                } else
+                {
+                    double resX = px - trace[1].Y;
+                    double resY = py - trace[1].X;
+                    double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
+
+                    if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
+                    {
+                        i = 1;
+                    }
+                    if (i == 1)
+                    {
+                        angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+                        if (self.GetDistanceTo(trace[0].X, trace[0].Y) >= res / 2)
+                        {
+                            i = 0;
+                        }
+                    } else
+                    {
+                        angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                    }
+
+                    move.Turn = angle;
+
+                    if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                    {
+                        move.Speed = game.WizardForwardSpeed;
+                    }
+                }
+            } else
+            {
+                move.Turn = angle;
+
+                if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                {
+                    move.Speed = game.WizardForwardSpeed;
+                }
+            }
+        }
+
         private int steps = 0;
         private double oldX = 0;
         private double oldY = 0;

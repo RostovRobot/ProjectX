@@ -81,10 +81,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 
             }
 
-            vc.Circle(self.X, self.Y, TACTIC_POROG, 0.0f, 1.0f, 1.0f);
+            vc.Circle(self.X, self.Y, TACTIC_POROG, 1.0f, 0.0f, 1.0f);
             if (/*условие наличие врага или нас в hotZone*/ self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > TACTIC_POROG)
             {
-                myTracer.goTo(hotZone, world, game, self, move);
+                //myTracer.goTo(hotZone, world, game, self, move);
+                myTracer.goToVisual(hotZone, world, game, self, move, vc);
             } else
             {
                 myTactic.getTacticMove(world, game, self, move);
