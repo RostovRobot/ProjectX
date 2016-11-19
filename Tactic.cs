@@ -39,7 +39,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 move.Speed = game.WizardBackwardSpeed;
 
             }
-            getRocket(world, game, self, getMostImportantTarget(getTargets(world, self), self), move);
+            getRocket(world, game, self, getNearlestTarget(getTargets(world, self), self), move);
 
             return move;
 
@@ -150,6 +150,32 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
             return targetminion;
+
+        }
+
+
+        public LivingUnit getNearlestTarget(List<LivingUnit> targets, Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
+        {
+            double mindist = double.MaxValue;
+
+            LivingUnit target=null;
+            foreach (var elem in targets)
+            {
+               
+                    double distance = GetDistance(self.X, self.Y, elem.X, elem.Y);
+                    if (distance < mindist)
+                    {
+                        mindist = distance;
+                        target = elem;
+                    }
+                
+            }
+
+            //if (targetwizard != null) { return targetwizard; }
+
+
+
+            return target;
 
         }
 
