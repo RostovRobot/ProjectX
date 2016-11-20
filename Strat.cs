@@ -12,10 +12,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        /*private Wizard self;
-        private World world;
-        private Game game;
-        private Move move;*/
+        private double K_ally = 1.0D;
+        private double K_enemy = 1.0D;
+        private double K_allyHP = 1.0D;
+        private double K_enemyHP = 1.0D;
+        private double K_distance = 1.0D;
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -64,17 +65,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             if (self.X < 600 && self.X > 400)
             {
-                if(self.Y > 3400 && self.Y < 3600)
-                {
-                    if(nearestTarget == null)
-                    {
-                        HotZone = enemyBase;
-                    }
-                }
-            }
-            if (self.X < 3600 && self.X > 3400)
-            {
-                if(self.Y < 600 && self.Y > 400)
+                if (self.Y > 3400 && self.Y < 3600)
                 {
                     if (nearestTarget == null)
                     {
@@ -82,11 +73,21 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     }
                 }
             }
-            if(self.X < 2100 && self.X > 1900)
+            if (self.X < 3600 && self.X > 3400)
             {
-                if(self.Y < 2100 && self.Y > 1900)
+                if (self.Y < 600 && self.Y > 400)
                 {
-                    if(nearestTarget == null)
+                    if (nearestTarget == null)
+                    {
+                        HotZone = enemyBase;
+                    }
+                }
+            }
+            if (self.X < 2100 && self.X > 1900)
+            {
+                if (self.Y < 2100 && self.Y > 1900)
+                {
+                    if (nearestTarget == null)
                     {
                         HotZone = enemyBase;
                     }
@@ -94,6 +95,91 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return HotZone;
         }
+
+        /// <summary>
+        /// !!! НЕ РЕАЛИЗОВАНО !!! Возвращает координаты самой важной зоны (реализация Овсянникова)
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <param name="game">Константы игры</param>
+        /// <param name="self">Собственный маг</param>
+        /// <returns>Точка на двухмерной карте</returns>
+        public Point2D getHotZone2(World world, Game game, Wizard self)
+        {
+            //определяеам список возможных зон
+            List<HotZone> hotZones = getZones(world, self);
+            //если список возможных зон не пуст
+            if (hotZones.Count > 0)
+            {
+                double maxHot = 0.0D;
+                Point2D returnPoint = new Point2D(hotZones.ElementAt(0).getX(), hotZones.ElementAt(0).getY());
+
+                //расставляем "температуру" каждой зоны
+                foreach (HotZone hZ in hotZones)
+                {
+                    double distanceFactor = 0.0D;
+                    double allyFactor = 0.0D;
+                    double enemyFactor = 0.0D;
+                    double allyHPFactor = 0.0D;
+                    double enemyHPFactor = 0.0D;
+                    
+                    //!!! НЕ РЕАЛИЗОВАНО ОПРЕДЕЛЕНИЕ ВЕЛИЧИН РАЗЛИЧНЫХ ФАКТОРОВ !!!
+
+                    hZ.hot = distanceFactor + allyFactor + enemyFactor + allyHPFactor + enemyHPFactor;
+                }
+
+                //выбираем зону с максимальной "температурой"
+                foreach (HotZone hZ in hotZones)
+                {
+                    if (hZ.hot > maxHot)
+                    {
+                        maxHot = hZ.hot;
+                        returnPoint = new Point2D(hZ.getX(), hZ.getY());
+                    }
+                }
+                return returnPoint;
+            } else
+            {
+                //иначе, вызываем метод Литвинова
+                return getHotZone(world, game, self);
+            }
+        }
+
+        /// <summary>
+        /// Возвращает список возможных горячих зон
+        /// </summary>
+        /// <param name="world">Игровой мир</param>
+        /// <returns>Коллекция точек возможных горячих зон</returns>
+        public List<HotZone> getZones(World world, Wizard self)
+        {
+            List<HotZone> returnList = new List<HotZone>();
+            foreach (var wizard in world.Wizards)
+            {
+                HotZone myZone = new HotZone(wizard.X, wizard.Y);
+                if (wizard.Faction == self.Faction)
+                { myZone.ally = true; }
+                returnList.Add(myZone);
+            }
+
+
+            foreach (var build in world.Buildings)
+            {
+                HotZone myZone = new HotZone(build.X, build.Y);
+                if (build.Faction == self.Faction)
+                { myZone.ally = true; }
+                returnList.Add(myZone);
+            }
+
+
+            foreach (var minion in world.Minions)
+            {
+                HotZone myZone = new HotZone(minion.X, minion.Y);
+                if (minion.Faction == self.Faction)
+                { myZone.ally = true; }
+                returnList.Add(myZone);
+            }
+            return returnList;
+        }
+
         /// <summary>
         /// !!! НЕ РЕАЛИЗЛВАНО!!! Рассылает команды союзникам, если мы - верховный маг
         /// </summary>
@@ -103,11 +189,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         public void setKommand(World world, Game game, Wizard self)
         {
             //первым делом проверяем - вырховный ли мы маг?
-            if(self.IsMaster)
+            if (self.IsMaster)
             {
                 //рассылаем команды
             }
         }
+
         /// <summary>
         /// Метод возвращает ближайшую вражескую цель для атаки
         /// </summary>
@@ -150,6 +237,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return nearestTarget;
         }
+
         /// <summary>
         /// Возвращает ближайшую союзную постройку
         /// </summary>
@@ -165,7 +253,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             LivingUnit nearestBuilding = null;
             double nearestBuildingDistance = double.MaxValue;
-            
+
             foreach (LivingUnit targetBuilding in targetsBuilding)
             {
                 if (targetBuilding.Faction == Faction.Neutral || targetBuilding.Faction != self.Faction)
@@ -184,6 +272,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return nearestBuilding;
         }
+
         /// <summary>
         /// Возвращает координату нашей базы
         /// </summary>
@@ -194,13 +283,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (self.Faction == Faction.Academy)
             {
                 myBase = new Point2D(500, 500);
-            }
-            else
+            } else
             {
                 myBase = new Point2D(3500, 3500);
             }
             return myBase;
         }
+
         /// <summary>
         /// Возвращает координату вражеской базы
         /// </summary>
@@ -212,8 +301,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (self.Faction == Faction.Academy)
             {
                 enemyBase = new Point2D(3500, 3500);
-            }
-            else
+            } else
             {
                 enemyBase = new Point2D(500, 500);
             }

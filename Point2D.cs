@@ -15,12 +15,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Координата X
         /// </summary>
-        private double x;
+        protected double x;
         /// <summary>
         /// Координата Y
         /// </summary>
-        private double y;
-
+        protected double y;
+        
         /// <summary>
         /// Метод конструктор заданными координатами
         /// </summary>
