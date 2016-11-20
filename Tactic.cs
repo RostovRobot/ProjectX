@@ -306,7 +306,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 {
                     double angle = self.GetAngleTo(targetUnit);
                     move.Turn = angle;
-
+                    move.Speed = 0;
                     if (Math.Abs(angle) <= self.VisionRange)
                     {
                         move.Action = ActionType.MagicMissile;
