@@ -93,7 +93,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
             hotZone = myStrat.getHotZone(world, game, self);
-
+            myStrat.getHotZone2(world, game, self, vc);
             if (vc != null)
             {
                 if (hotZone != null)

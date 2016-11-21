@@ -12,11 +12,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        private double K_ally = 1.0D;
-        private double K_enemy = 1.0D;
-        private double K_allyHP = 1.0D;
-        private double K_enemyHP = 1.0D;
-        private double K_distance = 1.0D;
+        private double K_ally = 0.12D;
+        private double K_enemy = 0.2D;
+        private double K_allyHP = 0.08D;
+        private double K_enemyHP = 0.1D;
+        private double K_distance = 0.1D;
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -103,7 +103,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <param name="game">Константы игры</param>
         /// <param name="self">Собственный маг</param>
         /// <returns>Точка на двухмерной карте</returns>
-        public Point2D getHotZone2(World world, Game game, Wizard self)
+        public Point2D getHotZone2(World world, Game game, Wizard self, VisualClient vc)
         {
             //определяеам список возможных зон
             List<HotZone> hotZones = getZones(world, self);
@@ -123,8 +123,65 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     double enemyHPFactor = 0.0D;
                     
                     //!!! НЕ РЕАЛИЗОВАНО ОПРЕДЕЛЕНИЕ ВЕЛИЧИН РАЗЛИЧНЫХ ФАКТОРОВ !!!
-
+                    foreach(Wizard wz in world.Wizards) //перебираем всех магов
+                    {
+                        double dist = wz.GetDistanceTo(hZ.getX(), hZ.getY()); //определение дистанции между текущей зоной и магом
+                        if (dist>20 && dist<600)
+                        {
+                            if (wz.Faction != self.Faction)
+                            {
+                                enemyFactor += 600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy;
+                                enemyHPFactor += K_enemyHP * (wz.MaxLife / wz.Life - 1);
+                            }else
+                            {
+                                allyFactor -= 600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally;
+                                allyHPFactor -= K_allyHP * (wz.MaxLife / (wz.MaxLife-wz.Life+1) - 1);
+                            }
+                        }
+                    }
+                    foreach (Building build in world.Buildings) //перебираем все здания
+                    {
+                        double dist = build.GetDistanceTo(hZ.getX(), hZ.getY()); //определение дистанции между текущей зоной и зданием
+                        if (dist > 20 && dist < 600)
+                        {
+                            if (build.Faction != self.Faction)
+                            {
+                                enemyFactor += 1.3*(600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy);
+                                enemyHPFactor += 1.3*K_enemyHP * (build.MaxLife / build.Life - 1);
+                            } else
+                            {
+                                allyFactor -= 1.3*(600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally);
+                                enemyHPFactor -= 1.3*K_allyHP * (build.MaxLife / (build.MaxLife-build.Life+1) - 1);
+                            }
+                        }
+                    }
+                    foreach (Minion minion in world.Minions) //перебираем всех миньонов
+                    {
+                        double dist = minion.GetDistanceTo(hZ.getX(), hZ.getY()); //определение дистанции между текущей зоной и миньоном
+                        if (dist > 20 && dist < 600)
+                        {
+                            if (minion.Faction != self.Faction)
+                            {
+                                enemyFactor += 0.2*(600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy);
+                                enemyHPFactor += 0.05*K_enemyHP * (minion.MaxLife / minion.Life - 1);
+                            } else
+                            {
+                                allyFactor -= 0.1*(600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally);
+                                enemyHPFactor -= 0.05*K_allyHP * (minion.MaxLife /(minion.MaxLife- minion.Life+1) - 1);
+                            }
+                        }
+                    }
+                    double dist2 = self.GetDistanceTo(hZ.getX(), hZ.getY());
+                    if (dist2 > 0)
+                    {
+                        distanceFactor = K_distance * (3000 / dist2);
+                    }
+                    
                     hZ.hot = distanceFactor + allyFactor + enemyFactor + allyHPFactor + enemyHPFactor;
+                    if(vc!=null)
+                    {
+                        vc.Text(hZ.getX(), hZ.getY(), Convert.ToString(hZ.hot), 1.0f, 0.0f, 0.0f);
+                    }
                 }
 
                 //выбираем зону с максимальной "температурой"
@@ -135,6 +192,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         maxHot = hZ.hot;
                         returnPoint = new Point2D(hZ.getX(), hZ.getY());
                     }
+                }
+
+                if(vc!=null)
+                {
+                    vc.Line(returnPoint.getX(), returnPoint.getY(), self.X, self.Y, 0.0f, 0.0f, 0.0f);
                 }
                 return returnPoint;
             } else
