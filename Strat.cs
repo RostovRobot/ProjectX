@@ -12,11 +12,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        private double K_ally = 0.12D;
-        private double K_enemy = 0.2D;
-        private double K_allyHP = 0.08D;
-        private double K_enemyHP = 0.1D;
-        private double K_distance = 0.1D;
+        private double K_ally = 1D;
+        private double K_enemy = 1.3D;
+        private double K_allyHP = 0.7D;
+        private double K_enemyHP = 0.85D;
+        private double K_distance = 1.5D;
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -37,7 +37,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D myBase = getMyBase(self);
             Point2D enemyBase = getEnemyBase(self);
 
-            if (self.Life > self.MaxLife * 1.2)
+            if (self.Life > self.MaxLife * lowHPFactor)
             {
                 switch ((int)self.Id)
                 {
@@ -63,9 +63,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 HotZone = myBase;
             }
-            if (self.X < 600 && self.X > 400)
+            if (self.X < world.Width / 10 * 1.5 && self.X > world.Width / 10)
             {
-                if (self.Y > 3400 && self.Y < 3600)
+                if (self.Y < world.Width / 10 * 8 && self.Y > world.Width / 10 * 8.5)
                 {
                     if (nearestTarget == null)
                     {
@@ -73,9 +73,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     }
                 }
             }
-            if (self.X < 3600 && self.X > 3400)
+            if (self.X < world.Width / 10 * 8 && self.X > world.Width / 10 * 8.5)
             {
-                if (self.Y < 600 && self.Y > 400)
+                if (self.Y < world.Width / 10 * 1.5 && self.Y > world.Width / 10)
                 {
                     if (nearestTarget == null)
                     {
