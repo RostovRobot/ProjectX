@@ -14,7 +14,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     class Tactic
     {
         double DistanceK = 20;//коэффицент удаления
-        double HealthK = 12;
+        double HealthK = 125;
+        double CRITICAL_ENEMY_HEALTH_POROG = 30;
+        double FATALITY_PRIORITY_BONUS = 100;//Бонус за добивание
 
         /// <summary>
         /// Точка для проверки на залипание
@@ -167,7 +169,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 double distance = GetDistance(self.X, self.Y, target.X, target.Y);
                 if (distance < game.WizardCastRange)
                 {
-                    double targetpriority = game.WizardCastRange / distance * DistanceK + (double)target.MaxLife / (target.Life * target.Life) * HealthK;
+                    double targetpriority = game.WizardCastRange / distance * DistanceK;// + (double)target.MaxLife / (target.Life * target.Life) * HealthK;
+                    if(target.Life<CRITICAL_ENEMY_HEALTH_POROG)
+                    {
+                        targetpriority += FATALITY_PRIORITY_BONUS;
+
+                    }
                     if (targetpriority > maxPriority)
                     {
                         restarget = target;
