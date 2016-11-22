@@ -29,6 +29,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         public int controlZalipDistance = 30;
 
         /// <summary>
+        /// Пороговое значение дистанции между магом и ближайшим врагом для отступления
+        /// </summary>
+        public int MIN_VRAG_DISTANCE = 300;
+
+        /// <summary>
         /// Выбор тактических приемов
         /// </summary>
         /// <param name="world">Игровой мир</param>
@@ -44,8 +49,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 move.Speed = game.WizardBackwardSpeed;
 
             }
-            getRocket(world, game, self, getTartgetwithHigestPriority(world,self,game), move);
-
+            getRocket(world, game, self, getTartgetwithHigestPriority(world, self, game), move);
+            Otstup(world, game, self, move);
+            if(self.Life/self.MaxLife<=0.7)
+            {
+                move.Speed = -game.WizardBackwardSpeed;
+            }
             return move;
 
 
@@ -340,7 +349,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (targetUnit != null)
             {
 
-                if (targetUnit.GetDistanceTo(targetUnit) <= self.CastRange)
+                if (self.GetDistanceTo(targetUnit) <= self.CastRange)
                 {
                     double angle = self.GetAngleTo(targetUnit);
                     move.Turn = angle;
@@ -359,6 +368,32 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
 
         }
+
+
+        
+        public void Otstup(World world, Game game, Wizard self,Move move)
+        {
+            LivingUnit vrag = getNearlestTarget(world, self);
+            if(vrag!=null)
+            {
+                double d = self.GetDistanceTo(vrag);
+                if(self.GetDistanceTo(vrag) <= MIN_VRAG_DISTANCE)
+                {
+                    double angle = self.GetAngleTo(vrag);
+                    move.Turn = angle;
+                    if(angle==0)
+                    {
+                        move.Speed = -game.WizardBackwardSpeed;
+                    }
+
+                }
+
+            }
+
+        }
+
+
+        
 
 
 
