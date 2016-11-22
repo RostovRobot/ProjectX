@@ -12,11 +12,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        private double K_ally = 1D;
-        private double K_enemy = 1.3D;
-        private double K_allyHP = 0.7D;
-        private double K_enemyHP = 0.85D;
-        private double K_distance = 1.5D;
+        private double K_ally =0.000001D;
+        private double K_enemy = 0.0000013D;
+        private double K_allyHP = 7.0D;
+        private double K_enemyHP = 10.0D;
+        private double K_distance = 20.0D;
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -130,11 +130,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             if (wz.Faction != self.Faction)
                             {
-                                enemyFactor += 600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy;
+                                enemyFactor += 216000000.0 * K_enemy - dist*dist*dist * K_enemy;
                                 enemyHPFactor += K_enemyHP * (wz.MaxLife / wz.Life - 1);
                             }else
                             {
-                                allyFactor -= 600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally;
+                                allyFactor -= 216000000.0 * K_ally  - dist*dist*dist * K_ally;
                                 allyHPFactor -= K_allyHP * (wz.MaxLife / (wz.MaxLife-wz.Life+1) - 1);
                             }
                         }
@@ -146,12 +146,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             if (build.Faction != self.Faction)
                             {
-                                enemyFactor += 1.3*(600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy);
-                                enemyHPFactor += 1.3*K_enemyHP * (build.MaxLife / build.Life - 1);
+                                enemyFactor += 2.0*(216000000.0 * K_enemy - dist *dist*dist * K_enemy);
+                                enemyHPFactor += 2.3*K_enemyHP * (build.MaxLife / build.Life - 1);
                             } else
                             {
-                                allyFactor -= 1.3*(600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally);
-                                enemyHPFactor -= 1.3*K_allyHP * (build.MaxLife / (build.MaxLife-build.Life+1) - 1);
+                                allyFactor -= 2.0*(216000000.0 * K_ally - dist * dist*dist * K_ally);
+                                allyHPFactor -= 2.3*K_allyHP * (build.MaxLife / (build.MaxLife-build.Life+1) - 1);
                             }
                         }
                     }
@@ -162,17 +162,17 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             if (minion.Faction != self.Faction)
                             {
-                                enemyFactor += 0.2*(600.0 * K_enemy * K_enemy * K_enemy - dist * K_enemy * K_enemy * K_enemy);
-                                enemyHPFactor += 0.05*K_enemyHP * (minion.MaxLife / minion.Life - 1);
+                                enemyFactor += 0.05*(216000000.0 * K_enemy - dist * dist*dist * K_enemy);
+                                enemyHPFactor += 0.005*K_enemyHP * (minion.MaxLife / minion.Life - 1);
                             } else
                             {
-                                allyFactor -= 0.1*(600.0 * K_ally * K_ally * K_ally - dist * K_ally * K_ally * K_ally);
-                                enemyHPFactor -= 0.05*K_allyHP * (minion.MaxLife /(minion.MaxLife- minion.Life+1) - 1);
+                                allyFactor -= 0.05*(216000000.0 * K_ally - dist *dist*dist * K_ally);
+                                allyHPFactor -= 0.005*K_allyHP * (minion.MaxLife /(minion.MaxLife- minion.Life+1) - 1);
                             }
                         }
                     }
                     double dist2 = self.GetDistanceTo(hZ.getX(), hZ.getY());
-                    if (dist2 > 0)
+                    if (dist2 > 100)
                     {
                         distanceFactor = K_distance * (3000 / dist2);
                     }
@@ -232,13 +232,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
 
-            foreach (var minion in world.Minions)
+            /*foreach (var minion in world.Minions)
             {
                 HotZone myZone = new HotZone(minion.X, minion.Y);
                 if (minion.Faction == self.Faction)
                 { myZone.ally = true; }
                 returnList.Add(myZone);
-            }
+            }*/
             return returnList;
         }
 
