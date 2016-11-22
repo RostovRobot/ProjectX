@@ -13,6 +13,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tactic
     {
+        double DistanceK = 20;//коэффицент удаления
+        double HealthK = 12;
+
         /// <summary>
         /// Точка для проверки на залипание
         /// </summary>
@@ -34,12 +37,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         // Добавил move, в который мы будем присваивать дополнительное движение.
         public Move getTacticMove(World world, Game game, Wizard self, Move move)
         {
-            if ((IsZalip(world, game, self, move)) || (self.GetDistanceTo(ZalipP.getX(), ZalipP.getY()) < controlZalipDistance))
+               if ((IsZalip(world, game, self, move)) || (self.GetDistanceTo(ZalipP.getX(), ZalipP.getY()) < controlZalipDistance))
             {
                 move.Speed = game.WizardBackwardSpeed;
 
             }
-            getRocket(world, game, self, getNearlestTarget(getTargets(world, self), self), move);
+            getRocket(world, game, self, getTartgetwithHigestPriority(world,self,game), move);
 
             return move;
 
@@ -152,6 +155,31 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return targetminion;
 
         }
+                        
+        public LivingUnit getTartgetwithHigestPriority(World world, Wizard self,Game game)
+        {
+            LivingUnit restarget = null;
+            double maxPriority = Double.MinValue;
+            var targets = getTargets(world, self);
+            foreach (var target in targets)
+            {
+                
+                double distance = GetDistance(self.X, self.Y, target.X, target.Y);
+                if (distance < game.WizardCastRange)
+                {
+                    double targetpriority = game.WizardCastRange / distance * DistanceK + (double)target.MaxLife / (target.Life * target.Life) * HealthK;
+                    if (targetpriority > maxPriority)
+                    {
+                        restarget = target;
+                        maxPriority = targetpriority;
+                    }
+                }
+
+            }
+
+
+            return restarget;
+        }
 
 
         public LivingUnit getNearlestTarget(List<LivingUnit> targets, Wizard self)//Подразумевается, что в коллекции идут элементы последоваттельно:волшебники, башни, миньоны
@@ -209,6 +237,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return target;
         }
 
+       
+
         /// <summary>
         /// Определение расстояния до ближайшего врага
         /// </summary>
@@ -225,6 +255,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             return distance;
         }
+        
         /// <summary>
         /// Определение доступных целей для атаки
         /// </summary>
