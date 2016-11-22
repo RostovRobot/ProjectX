@@ -245,6 +245,31 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
         }
 
+        public Point2D GetNextWaypoint(Point2D NextWaypoint, Point2D point)
+        {
+            List<LinePoint> trace = new List<LinePoint>();
+            trace = getTrace(point, world, game, self);
+            NextWaypoint = trace[1];
+            return NextWaypoint;
+        }
+        /*
+        public Point2D GetLastWaypoint(Point2D LastWaypoint, Point2D point)
+        {
+            List<LinePoint> trace = new List<LinePoint>();
+            trace = getTrace(point, world, game, self);
+            Point2D PredLastWaypoint = null;
+            if(LastWaypoint == null)
+            {
+                LastWaypoint = trace[0];
+            }
+            if (LastWaypoint != trace[0])
+                if (PredLastWaypoint != trace[0])
+                {
+                    LastWaypoint = trace[0];
+                }
+            return LastWaypoint;
+        }
+        */
         public int i = 0; //i-логическая переменная
         /// <summary>
         /// Передвижение
