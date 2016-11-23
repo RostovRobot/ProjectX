@@ -463,6 +463,37 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
 
 
+        public  LinePoint getLastPointLine(World world, Game game, Wizard self)
+        {
+            List<LinePoint> llp = new List<LinePoint>();
+            llp = getPointMap(world);
+            Point2D point = new Point2D(10000, 10000);
+            LinePoint lp = new LinePoint();
+            int ind = -1;
+            if (getTrace(point, world, game, self)[0].index > 0)
+            {
+                ind = getTrace(point, world, game, self)[0].index - 1;
+            }
+            else
+            {
+                ind = getTrace(point, world, game, self)[0].index;
+            }
+
+            int ln = getTrace(point, world, game, self)[0].line;
+
+            
+                for(int i=0;i<llp.Count;i++)
+                {
+                    if((llp[i].line==ln)&&(llp[i].index == ind))
+                {
+                    lp = llp[i];
+                }
+                }
+
+
+            return lp;
+        }
+        
         /*private Point2D NextWaypoint()
         {
             int lastWaypointIndex = waypoints.Length - 1;

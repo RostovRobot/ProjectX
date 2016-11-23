@@ -31,7 +31,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Пороговое значение дистанции между магом и ближайшим врагом для отступления
         /// </summary>
-        public int MIN_VRAG_DISTANCE = 300;
+        public int MIN_VRAG_DISTANCE = 250;
 
         /// <summary>
         /// Выбор тактических приемов
@@ -51,9 +51,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             getRocket(world, game, self, getTartgetwithHigestPriority(world, self, game), move);
             Otstup(world, game, self, move);
-            if(self.Life/self.MaxLife<=0.7)
+            if(self.Life/self.MaxLife<=0.6)
             {
-                move.Speed = -game.WizardBackwardSpeed;
+                LowHealthCheck(world, game, self, move);
+                //move.Speed = -game.WizardBackwardSpeed;
             }
             return move;
 
@@ -383,7 +384,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     move.Turn = angle;
                     if(angle==0)
                     {
-                        move.Speed = -game.WizardBackwardSpeed;
+                        //move.Speed = -game.WizardBackwardSpeed;
+                        LowHealthCheck(world, game, self, move);
                     }
 
                 }
@@ -393,7 +395,23 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
 
 
-        
+        public void LowHealthCheck(World world, Game game, Wizard self,Move move)
+        {
+
+            Tracer tr = new Tracer();
+            double BaseX = tr.getLastPointLine(world,game,self).X, BaseY= tr.getLastPointLine(world, game, self).Y;
+
+            double dist = Math.Sqrt(Math.Pow(self.X - BaseX, 2) + Math.Pow(self.Y - BaseY, 2));
+
+            double angle = 180 - self.GetAngleTo(BaseX, BaseY) * 180 / Math.PI;
+            if (angle >= 180)
+                angle = angle - 360;           
+            angle = angle / 180 * Math.PI;
+            move.StrafeSpeed = 3.0 *  Math.Sin(angle);
+            move.Speed = -3.0 * Math.Cos(angle);
+            
+
+        }
 
 
 
