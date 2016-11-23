@@ -37,60 +37,47 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D myBase = getMyBase(self);
             Point2D enemyBase = getEnemyBase(self);
 
-            if (self.Life > self.MaxLife * lowHPFactor)
+            if (self.Life > self.MaxLife * 1.1D)//сам не пойму что это, но если тут что то изменить, то не будет работать. плохо
             {
-                switch ((int)self.Id)
+                switch ((int)self.Id)//если наш айди
                 {
                     case 1:
                     case 2:
                     case 6:
                     case 7:
-                        HotZone = new Point2D(500, 3500);
+                        HotZone = new Point2D(3500, 3500);//то топ
                         break;
                     case 3:
                     case 8:
-                        HotZone = new Point2D(2000, 2000);
+                        HotZone = new Point2D(2000, 2000);//то мид
                         break;
                     case 4:
                     case 5:
                     case 9:
                     case 10:
-                        HotZone = new Point2D(3500, 500);
+                        HotZone = new Point2D(500, 500);//то боттом
                         break;
                 }
             }
-            if (self.Life < self.MaxLife * 1.2D)
+            if (self.X < 600 && self.X > 400)//если наш икс в диапазоне
             {
-                HotZone = myBase;
-            }
-            if (self.X < world.Width / 10 * 1.5 && self.X > world.Width / 10)
-            {
-                if (self.Y < world.Width / 10 * 8 && self.Y > world.Width / 10 * 8.5)
-                {
-                    if (nearestTarget == null)
-                    {
-                        HotZone = enemyBase;
-                    }
+                if (self.Y < 600 && self.Y > 400)//и игрек тоже
+                {                    
+                    HotZone = enemyBase;//то хотзон - база врага
                 }
             }
-            if (self.X < world.Width / 10 * 8 && self.X > world.Width / 10 * 8.5)
+            if (self.X < 3600.0D && self.X > 3400.0D)//если наш икс в диапазоне
             {
-                if (self.Y < world.Width / 10 * 1.5 && self.Y > world.Width / 10)
+                if (self.Y < 3600.0D && self.Y > 3400.0D)//и игрек тоже
                 {
-                    if (nearestTarget == null)
-                    {
-                        HotZone = enemyBase;
-                    }
+                    HotZone = enemyBase;//то хотзон - база врага
                 }
             }
-            if (self.X < 2100 && self.X > 1900)
+            if (self.X < 2100.0D && self.X > 1900.0D)//если наш икс в диапазоне
             {
-                if (self.Y < 2100 && self.Y > 1900)
+                if (self.Y < 2100.0D && self.Y > 1900.0D)//и игрек тоже
                 {
-                    if (nearestTarget == null)
-                    {
-                        HotZone = enemyBase;
-                    }
+                    HotZone = enemyBase;//то хотзон - база врага
                 }
             }
             return HotZone;
@@ -344,10 +331,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D myBase;
             if (self.Faction == Faction.Academy)
             {
-                myBase = new Point2D(500, 500);
+                myBase = new Point2D(500, 3500);
             } else
             {
-                myBase = new Point2D(3500, 3500);
+                myBase = new Point2D(3500, 500);
             }
             return myBase;
         }
@@ -362,10 +349,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D enemyBase;
             if (self.Faction == Faction.Academy)
             {
-                enemyBase = new Point2D(3500, 3500);
+                enemyBase = new Point2D(3500, 500);
             } else
             {
-                enemyBase = new Point2D(500, 500);
+                enemyBase = new Point2D(500, 3500);
             }
             return enemyBase;
         }
