@@ -33,9 +33,6 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             this.move = move;
         }
 
-
-
-
         /// <summary>
         /// Получение маршрута от точки к точке, через центр либо базу
         /// </summary>
@@ -149,8 +146,6 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return Waypoints;
         }
 
-
-
         /// <summary>
         /// Создание списка точек
         /// </summary>
@@ -185,12 +180,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(3800, 600, 2, 6));
             return FullWayPoint;
         }
-
-
-
-
-
-
+        
         /// <summary>
         /// Выбор пути через базу или центр
         /// </summary>
@@ -380,8 +370,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     CrashedMove(move, self, game);
                 } else
                 {
-                    double resX = px - trace[1].Y;
-                    double resY = py - trace[1].X;
+                    double resX = px - trace[1].X;
+                    double resY = py - trace[1].Y;
                     double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
 
                     if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
