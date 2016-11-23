@@ -7,11 +7,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     public sealed class MyStrategy : IStrategy
     {
         const int HOT_ZONE_POROG = 80;
-        const int ENEMY_POROG = 550;
+        const int ENEMY_POROG = 600;
         Strat myStrat = new Strat();
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
         Point2D hotZone = new Point2D();
+        bool isTactic = false;
 
         //ÓÄÀËÈÒÜ ÏÅÐÅÄ ÄÅÏËÎÈÒÎÌ!!!!!
         VisualClient vc;
@@ -115,9 +116,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     vc.FillCircle(LP.X, LP.Y, 5, 0.0f, 1.0f, 0.0f);
                 }
             }
-
+            int CD = self.RemainingCooldownTicksByAction[2];
             double nearestTargetDistance = myTactic.getNearestTargetDistance(world, self);
-            if (nearestTargetDistance>ENEMY_POROG && self.GetDistanceTo(hotZone.getX(), hotZone.getY()) > HOT_ZONE_POROG)
+            if (nearestTargetDistance<ENEMY_POROG*0.9D || (nearestTargetDistance < ENEMY_POROG && CD<10) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)
+            {
+                myTactic.getTacticMove(world, game, self, move);
+                if (vc != null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
+            } else
             {
                 if (vc == null)
                 {
@@ -128,11 +133,26 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
                     vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
                 }
-            } else
+            }
+            
+            /*if(nearestTargetDistance < ENEMY_POROG-50 ||(isTactic && nearestTargetDistance < ENEMY_POROG) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)
             {
                 myTactic.getTacticMove(world, game, self, move);
-                if(vc!=null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
-            }
+                if (vc != null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
+                isTactic = true;
+            } else
+            {
+                if (vc == null)
+                {
+                    myTracer.goTo(hotZone, world, game, self, move);
+                } else
+                {
+                    myTracer.goToVisual(hotZone, world, game, self, move, vc);
+
+                    vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
+                }
+                isTactic = false;
+            }*/
 
             //âûçûâàåì ìåòîä getHotZone ó îáúåêòà-ñòðàòåãèè
 
