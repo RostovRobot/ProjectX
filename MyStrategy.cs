@@ -7,7 +7,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     public sealed class MyStrategy : IStrategy
     {
         const int HOT_ZONE_POROG = 80;
-        const int ENEMY_POROG = 600;
+        const int ENEMY_POROG = 550;
         Strat myStrat = new Strat();
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
@@ -84,9 +84,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (vc != null)
             {
                 vc.BeginPre();
-                vc.FillRect(400, 400, 600, 600, 1.0f, 0.0f, 1.0f);
-                vc.FillRect(3400, 3400, 3600, 3600, 1.0f, 0.0f, 1.0f);
-                vc.FillRect(1900, 1900, 2100, 2100, 1.0f, 0.0f, 1.0f);
+                vc.FillRect(0, 0, 500, 500, 1.0f, 0.0f, 1.0f);
+                vc.FillRect(3500, 3500, 4000, 4000, 1.0f, 0.0f, 1.0f);
+                vc.FillRect(1650, 1650, 2350, 2350, 1.0f, 0.0f, 1.0f);
                 vc.EndPre();
                 vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
             }

@@ -163,7 +163,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(200, 3400, 0, 0));
             FullWayPoint.Add(new LinePoint(200, 2600, 0, 1));
             FullWayPoint.Add(new LinePoint(200, 1700, 0, 2));
-            FullWayPoint.Add(new LinePoint(400, 400, 0, 3));
+            FullWayPoint.Add(new LinePoint(300, 300, 0, 3));
             FullWayPoint.Add(new LinePoint(1700, 200, 0, 4));
             FullWayPoint.Add(new LinePoint(2600, 200, 0, 5));
             FullWayPoint.Add(new LinePoint(3400, 200, 0, 6));
@@ -179,7 +179,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(600, 3800, 2, 0));
             FullWayPoint.Add(new LinePoint(1400, 3800, 2, 1));
             FullWayPoint.Add(new LinePoint(2300, 3800, 2, 2));
-            FullWayPoint.Add(new LinePoint(3600, 3600, 2, 3));
+            FullWayPoint.Add(new LinePoint(3700, 3700, 2, 3));
             FullWayPoint.Add(new LinePoint(3800, 2300, 2, 4));
             FullWayPoint.Add(new LinePoint(3800, 1400, 2, 5));
             FullWayPoint.Add(new LinePoint(3800, 600, 2, 6));

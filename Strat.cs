@@ -12,11 +12,39 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Strat
     {
-        private double K_ally =0.000001D;
+        private double K_ally = 0.000001D;
         private double K_enemy = 0.0000013D;
         private double K_allyHP = 7.0D;
         private double K_enemyHP = 10.0D;
         private double K_distance = 20.0D;
+        private int lineType = -1; //линия игры нашего мага
+
+        /*public Strat()
+        {
+
+        }
+        public Strat(Wizard self)
+        {
+            switch ((int)self.Id)//если наш айди
+            {
+                case 1:
+                case 2:
+                case 6:
+                case 7:
+                    lineType = 1; //то линия - топ
+                    break;
+                case 3:
+                case 8:
+                    lineType = 2; //то линия - мид
+                    break;
+                case 4:
+                case 5:
+                case 9:
+                case 10:
+                    lineType = 3; //то линия - боттом
+                    break;
+            }
+        }*/
 
         /// <summary>
         /// Возвращает координаты самой важной зоны
@@ -37,55 +65,76 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D myBase = getMyBase(self);
             Point2D enemyBase = getEnemyBase(self);
 
-            if (self.Life > self.MaxLife * 1.1D)//сам не пойму что это, но если тут что то изменить, то не будет работать. плохо
-                //проверка на малое ХП. Если много ХП, то выбираем линию
-                //пока сюда стратегия не попадает (т.к. условие "если у нас на 110% от максимального ХП"
+            if (self.Life > self.MaxLife * lowHPFactor) //если у нас достаточно ХП
             {
-                switch ((int)self.Id)//если наш айди
+                if (lineType < 0) //если линия еще не выбрана, то выбираем ее по айди
                 {
-                    case 1:
-                    case 2:
-                    case 6:
-                    case 7:
-                        HotZone = new Point2D(3500, 3500);//то топ
-                        break;
+                    switch ((int)self.Id)//если наш айди
+                    {
+                        case 1:
+                        case 2:
+                        case 6:
+                        case 7:
+                            lineType = 1; //то линия - топ
+                            break;
+                        case 3:
+                        case 8:
+                            lineType = 2; //то линия - мид
+                            break;
+                        case 4:
+                        case 5:
+                        case 9:
+                        case 10:
+                            lineType = 3; //то линия - боттом
+                            break;
+                    }
+                }
+                switch (lineType)//выбираем координаты по нашей линии
+                {
                     case 3:
-                    case 8:
+                        HotZone = new Point2D(3700, 3700);//то боттом
+                        break;
+                    case -1:
+                    case 2:
                         HotZone = new Point2D(2000, 2000);//то мид
                         break;
-                    case 4:
-                    case 5:
-                    case 9:
-                    case 10:
-                        HotZone = new Point2D(500, 500);//то боттом
+                    case 1:
+                        HotZone = new Point2D(300, 300);//то топ
                         break;
                 }
-            }
-            if (self.X < 600 && self.X > 400)//если наш икс в диапазоне
-            {
-                if (self.Y < 600 && self.Y > 400)//и игрек тоже
-                    //странные координаты. Видимо раньше маг шел куда то в току {500;500}
-                    //то есть, как только маг туда пришел - даем ему команду идти дальше
-                    //сейчас маг туда не доходит
-                {                    
-                    HotZone = enemyBase;//то хотзон - база врага
-                }
-            }
-            if (self.X < 3600.0D && self.X > 3400.0D)//если наш икс в диапазоне
-            {
-                if (self.Y < 3600.0D && self.Y > 3400.0D)//и игрек тоже
-                    //аналогично, но в другом углу
+                double allyBaseDist = self.GetDistanceTo(myBase.getX(), myBase.getY()); //измеряем расстояние до своей базы
+                double enemyBaseDist = self.GetDistanceTo(enemyBase.getX(), enemyBase.getY()); //измеряем расстояние до базы врага
+                if(enemyBaseDist<allyBaseDist) //если до базы врага ближе
                 {
                     HotZone = enemyBase;//то хотзон - база врага
                 }
-            }
-            if (self.X < 2100.0D && self.X > 1900.0D)//если наш икс в диапазоне
-            {
-                if (self.Y < 2100.0D && self.Y > 1900.0D)//и игрек тоже
-                    //аналогично в центре
+                if (self.X < 500 /*&& self.X > 400*/)//если наш икс в диапазоне
                 {
-                    HotZone = enemyBase;//то хотзон - база врага
+                    if (self.Y < 500 /*&& self.Y > 400*/)//и игрек тоже
+                    {
+                        HotZone = enemyBase;//то хотзон - база врага
+                        lineType = 1; //и наша линия - топ
+                    }
                 }
+                if (/*self.X < 3600.0D &&*/ self.X > 3500.0D)//если наш икс в диапазоне
+                {
+                    if (/*self.Y < 3600.0D &&*/ self.Y > 3500.0D)//и игрек тоже
+                    {
+                        HotZone = enemyBase;//то хотзон - база врага
+                        lineType = 3; //и наша линия - боттом
+                    }
+                }
+                if (self.X < 2350.0D && self.X > 1650.0D)//если наш икс в диапазоне
+                {
+                    if (self.Y < 2350.0D && self.Y > 1650.0D)//и игрек тоже
+                    {
+                        HotZone = enemyBase;//то хотзон - база врага
+                        lineType = 2; //и наша линия - мид
+                    }
+                }
+            } else
+            {
+                HotZone = myBase;
             }
             return HotZone;
         }
@@ -115,21 +164,21 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     double enemyFactor = 0.0D;
                     double allyHPFactor = 0.0D;
                     double enemyHPFactor = 0.0D;
-                    
+
                     //!!! НЕ РЕАЛИЗОВАНО ОПРЕДЕЛЕНИЕ ВЕЛИЧИН РАЗЛИЧНЫХ ФАКТОРОВ !!!
-                    foreach(Wizard wz in world.Wizards) //перебираем всех магов
+                    foreach (Wizard wz in world.Wizards) //перебираем всех магов
                     {
                         double dist = wz.GetDistanceTo(hZ.getX(), hZ.getY()); //определение дистанции между текущей зоной и магом
-                        if (dist>20 && dist<600)
+                        if (dist > 20 && dist < 600)
                         {
                             if (wz.Faction != self.Faction)
                             {
-                                enemyFactor += 216000000.0 * K_enemy - dist*dist*dist * K_enemy;
+                                enemyFactor += 216000000.0 * K_enemy - dist * dist * dist * K_enemy;
                                 enemyHPFactor += K_enemyHP * (wz.MaxLife / wz.Life - 1);
-                            }else
+                            } else
                             {
-                                allyFactor -= 216000000.0 * K_ally  - dist*dist*dist * K_ally;
-                                allyHPFactor -= K_allyHP * (wz.MaxLife / (wz.MaxLife-wz.Life+1) - 1);
+                                allyFactor -= 216000000.0 * K_ally - dist * dist * dist * K_ally;
+                                allyHPFactor -= K_allyHP * (wz.MaxLife / (wz.MaxLife - wz.Life + 1) - 1);
                             }
                         }
                     }
@@ -140,12 +189,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             if (build.Faction != self.Faction)
                             {
-                                enemyFactor += 2.0*(216000000.0 * K_enemy - dist *dist*dist * K_enemy);
-                                enemyHPFactor += 2.3*K_enemyHP * (build.MaxLife / build.Life - 1);
+                                enemyFactor += 2.0 * (216000000.0 * K_enemy - dist * dist * dist * K_enemy);
+                                enemyHPFactor += 2.3 * K_enemyHP * (build.MaxLife / build.Life - 1);
                             } else
                             {
-                                allyFactor -= 2.0*(216000000.0 * K_ally - dist * dist*dist * K_ally);
-                                allyHPFactor -= 2.3*K_allyHP * (build.MaxLife / (build.MaxLife-build.Life+1) - 1);
+                                allyFactor -= 2.0 * (216000000.0 * K_ally - dist * dist * dist * K_ally);
+                                allyHPFactor -= 2.3 * K_allyHP * (build.MaxLife / (build.MaxLife - build.Life + 1) - 1);
                             }
                         }
                     }
@@ -156,12 +205,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             if (minion.Faction != self.Faction)
                             {
-                                enemyFactor += 0.05*(216000000.0 * K_enemy - dist * dist*dist * K_enemy);
-                                enemyHPFactor += 0.005*K_enemyHP * (minion.MaxLife / minion.Life - 1);
+                                enemyFactor += 0.05 * (216000000.0 * K_enemy - dist * dist * dist * K_enemy);
+                                enemyHPFactor += 0.005 * K_enemyHP * (minion.MaxLife / minion.Life - 1);
                             } else
                             {
-                                allyFactor -= 0.05*(216000000.0 * K_ally - dist *dist*dist * K_ally);
-                                allyHPFactor -= 0.005*K_allyHP * (minion.MaxLife /(minion.MaxLife- minion.Life+1) - 1);
+                                allyFactor -= 0.05 * (216000000.0 * K_ally - dist * dist * dist * K_ally);
+                                allyHPFactor -= 0.005 * K_allyHP * (minion.MaxLife / (minion.MaxLife - minion.Life + 1) - 1);
                             }
                         }
                     }
@@ -170,9 +219,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     {
                         distanceFactor = K_distance * (3000 / dist2);
                     }
-                    
+
                     hZ.hot = distanceFactor + allyFactor + enemyFactor + allyHPFactor + enemyHPFactor;
-                    if(vc!=null)
+                    if (vc != null)
                     {
                         vc.Text(hZ.getX(), hZ.getY(), Convert.ToString(hZ.hot), 1.0f, 0.0f, 0.0f);
                     }
@@ -188,7 +237,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     }
                 }
 
-                if(vc!=null)
+                if (vc != null)
                 {
                     vc.Line(returnPoint.getX(), returnPoint.getY(), self.X, self.Y, 0.0f, 0.0f, 0.0f);
                 }
