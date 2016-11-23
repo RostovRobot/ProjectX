@@ -38,6 +38,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             Point2D enemyBase = getEnemyBase(self);
 
             if (self.Life > self.MaxLife * 1.1D)//сам не пойму что это, но если тут что то изменить, то не будет работать. плохо
+                //проверка на малое ХП. Если много ХП, то выбираем линию
+                //пока сюда стратегия не попадает (т.к. условие "если у нас на 110% от максимального ХП"
             {
                 switch ((int)self.Id)//если наш айди
                 {
@@ -62,6 +64,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (self.X < 600 && self.X > 400)//если наш икс в диапазоне
             {
                 if (self.Y < 600 && self.Y > 400)//и игрек тоже
+                    //странные координаты. Видимо раньше маг шел куда то в току {500;500}
+                    //то есть, как только маг туда пришел - даем ему команду идти дальше
+                    //сейчас маг туда не доходит
                 {                    
                     HotZone = enemyBase;//то хотзон - база врага
                 }
@@ -69,6 +74,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (self.X < 3600.0D && self.X > 3400.0D)//если наш икс в диапазоне
             {
                 if (self.Y < 3600.0D && self.Y > 3400.0D)//и игрек тоже
+                    //аналогично, но в другом углу
                 {
                     HotZone = enemyBase;//то хотзон - база врага
                 }
@@ -76,6 +82,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             if (self.X < 2100.0D && self.X > 1900.0D)//если наш икс в диапазоне
             {
                 if (self.Y < 2100.0D && self.Y > 1900.0D)//и игрек тоже
+                    //аналогично в центре
                 {
                     HotZone = enemyBase;//то хотзон - база врага
                 }
