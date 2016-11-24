@@ -328,10 +328,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     else
                     {
                         angle = self.GetAngleTo(trace[0].X, trace[0].Y);
-                        if (self.GetDistanceTo(trace[1].X, trace[1].Y) < distance10)
-                        {
-                            angle = self.GetAngleTo(trace[1].X, trace[1].Y);
-                        }
+
                     }
 
                     move.Turn = angle;
