@@ -56,14 +56,16 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             double SMinf = 0;
             double NMin = 2000;
             double NMinf = 0;
+            double py;
+            double px;
             int NearestPoint = 0;
             int NearestPointLine = 0;
             LinePoint needPoint;
             int ineedPoint = 0;
             for (int i = 0; i < points.Count; i++)
             {
-                double px = points[i].X;
-                double py = points[i].Y;
+                px = points[i].X;
+                py = points[i].Y;
                 double resX = px - self.X;
                 double resY = py - self.Y;
                 SMinf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
@@ -75,8 +77,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             for (int i = 0; i < points.Count; i++)
             {
-                double px = points[i].X;
-                double py = points[i].Y;
+                px = points[i].X;
+                py = points[i].Y;
                 double resX = px - needPoint2D.getX();
                 double resY = py - needPoint2D.getY();
                 NMinf = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
@@ -90,8 +92,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             NearestPointLine = points[NearestPoint].line;
             double distans01;
             double distans12;
-            double px = needPoint.X;
-            double py = needPoint.Y;
+            px = needPoint.X;
+            py = needPoint.Y;
             double resX1 = px - FullWaypoints[4][3].X;
             double resY1 = py - FullWaypoints[4][3].Y;
             double resX2 = px - FullWaypoints[5][3].X;
@@ -326,7 +328,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     else
                     {
                         angle = self.GetAngleTo(trace[0].X, trace[0].Y);
-                        
+                        if (self.GetDistanceTo(trace[1].X, trace[1].Y) < distance10)
+                        {
+                            angle = self.GetAngleTo(trace[1].X, trace[1].Y);
+                        }
                     }
 
                     move.Turn = angle;
