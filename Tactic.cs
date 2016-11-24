@@ -55,7 +55,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             
             getRocket(world, game, self, target, move);
             Otstup(world, game, self, move);
-            if((double)self.Life/self.MaxLife<=CRITICAL_LIFE_POROG)
+            if(((double)self.Life/self.MaxLife<=CRITICAL_LIFE_POROG)&&  (target!=null))
             {
                 
                 LowHealthCheck(world, game, self, move);
