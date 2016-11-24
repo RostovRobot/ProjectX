@@ -43,8 +43,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         public List<LinePoint> tracerGet(List<LinePoint> points, Point2D needPoint2D, int transition, Wizard self)
         {
 
-            List<LinePoint>[] FullWaypoints = new List<LinePoint>[3];
-            for (int i = 0; i < 3; i++)
+            List<LinePoint>[] FullWaypoints = new List<LinePoint>[5];
+            for (int i = 0; i < 5; i++)
                 FullWaypoints[i] = new List<LinePoint>();
             for (int i = 0; i < points.Count; i++)
             {
@@ -87,9 +87,17 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 }
             }
             needPoint = points[ineedPoint];
-
-
             NearestPointLine = points[NearestPoint].line;
+            double distans01;
+            double distans12;
+            double px = needPoint.X;
+            double py = needPoint.Y;
+            double resX1 = px - FullWaypoints[4][3].X;
+            double resY1 = py - FullWaypoints[4][3].Y;
+            double resX2 = px - FullWaypoints[5][3].X;
+            double resY2 = py - FullWaypoints[5][3].Y;
+            distans01 = Math.Sqrt(Math.Pow(resX1, 2) + Math.Pow(resY1, 2));
+            distans12 = Math.Sqrt(Math.Pow(resX2, 2) + Math.Pow(resY2, 2));
             if (NearestPointLine == needPoint.line)
             {
                 if (points[NearestPoint].index <= needPoint.index)
@@ -124,10 +132,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     }
                 }
 
-
-              
-                if (needPoint.line != 1)
-                    Waypoints.Add(FullWaypoints[1][transition]);  
+                if (distans01 < distans12)
+                {
+                    Waypoints.Add(FullWaypoints[4][3]);
+                }
+                else
+                {
+                    Waypoints.Add(FullWaypoints[5][3]);
+                }
+                Waypoints.Add(FullWaypoints[needPoint.line][transition]);
                 if (points[transition].index <= needPoint.index)
                 {
                     for (int i = transition; i <= needPoint.index; i++)
@@ -137,7 +150,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 }
                 else
                 {
-                    for (int i = points[transition].index; i >= needPoint.index; i--)
+                    for (int i = transition; i >= needPoint.index; i--)
                     {
                         Waypoints.Add(FullWaypoints[needPoint.line][i]);
                     }
@@ -178,6 +191,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             FullWayPoint.Add(new LinePoint(3800, 2300, 2, 4));
             FullWayPoint.Add(new LinePoint(3800, 1400, 2, 5));
             FullWayPoint.Add(new LinePoint(3800, 600, 2, 6));
+            //line0-1
+            FullWayPoint.Add(new LinePoint(800, 800, 3, 3));
+            //line1-2
+            FullWayPoint.Add(new LinePoint(3200, 3200, 4, 3));
             return FullWayPoint;
         }
         
@@ -273,9 +290,15 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             trace = getTrace(point, world, game, self);
 
             
-                double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
-                double px = trace[0].X;
-                double py = trace[0].Y;
+            double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+            double px = trace[0].X;
+            double py = trace[0].Y;
+            double distance10;
+            double px1 = trace[0].X;
+            double py1 = trace[0].Y;
+            double px2 = trace[1].X - trace[0].X;
+            double py2 = trace[1].Y - trace[0].Y;
+            distance10 = Math.Sqrt(Math.Pow(px2, 2) + Math.Pow(py2, 2));
             if (trace.Count > 1)
             {
                 if (isCrash(self) == true)
@@ -303,6 +326,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     else
                     {
                         angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                        
                     }
 
                     move.Turn = angle;
