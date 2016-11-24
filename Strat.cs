@@ -385,13 +385,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         private Point2D getMyBase(Wizard self)
         {
             Point2D myBase;
-            if (self.Faction == Faction.Academy)
+            myBase = new Point2D(500, 3500);
+            /*if (self.Faction == Faction.Academy)
             {
                 myBase = new Point2D(500, 3500);
             } else
             {
                 myBase = new Point2D(3500, 500);
-            }
+            }*/
             return myBase;
         }
 
@@ -403,13 +404,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         private Point2D getEnemyBase(Wizard self)
         {
             Point2D enemyBase;
-            if (self.Faction == Faction.Academy)
+            enemyBase = new Point2D(3500, 500);
+            /*if (self.Faction == Faction.Academy)
             {
                 enemyBase = new Point2D(3500, 500);
             } else
             {
                 enemyBase = new Point2D(500, 3500);
-            }
+            }*/
             return enemyBase;
         }
     }

@@ -86,7 +86,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 vc.BeginPre();
                 vc.FillRect(0, 0, 500, 500, 1.0f, 0.0f, 1.0f);
-                vc.FillRect(3500, 3500, 4000, 4000, 1.0f, 0.0f, 1.0f);
+                vc.FillRect(3500, 3500, 4000, 4000, 1.0f, 1.0f, 0.0f);
                 vc.FillRect(1650, 1650, 2350, 2350, 1.0f, 0.0f, 1.0f);
                 vc.EndPre();
                 vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
