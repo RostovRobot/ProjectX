@@ -17,6 +17,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         double HealthK = 125;
         double CRITICAL_ENEMY_HEALTH_POROG = 30;
         double FATALITY_PRIORITY_BONUS = 100;//Бонус за добивание
+        double CRITICAL_LIFE_POROG = 0.6;
+
 
         /// <summary>
         /// Точка для проверки на залипание
@@ -49,10 +51,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 move.Speed = game.WizardBackwardSpeed;
 
             }
-            getRocket(world, game, self, getTartgetwithHigestPriority(world, self, game), move);
+            LivingUnit target = getTartgetwithHigestPriority(world, self, game);
+            
+            getRocket(world, game, self, target, move);
             Otstup(world, game, self, move);
-            if(self.Life/self.MaxLife<=0.6)
+            if((double)self.Life/self.MaxLife<=CRITICAL_LIFE_POROG)
             {
+                
                 LowHealthCheck(world, game, self, move);
                 //move.Speed = -game.WizardBackwardSpeed;
             }
@@ -324,6 +329,27 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
         }
 
+        public bool TacticIsAll(World world,Wizard self,Game game)
+        {
+            bool isAll = true;
+
+            if (self.Life / self.MaxLife <= CRITICAL_LIFE_POROG)
+            {
+                isAll = false;
+                
+                
+            }
+
+            if (getTartgetwithHigestPriority(world,self,game)!=null)
+            {
+                isAll = false;
+
+
+            }
+            return isAll;
+
+        }
+
 
 
 
@@ -366,6 +392,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 }
 
             }
+           
 
 
         }
@@ -380,6 +407,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 double d = self.GetDistanceTo(vrag);
                 if(self.GetDistanceTo(vrag) <= MIN_VRAG_DISTANCE)
                 {
+                   
                     double angle = self.GetAngleTo(vrag);
                     move.Turn = angle;
                     if(angle==0)

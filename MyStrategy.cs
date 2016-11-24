@@ -12,11 +12,11 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         Tracer myTracer = new Tracer();
         Tactic myTactic = new Tactic();
         Point2D hotZone = new Point2D();
-        bool isTactic = false;
+        bool isTactic = false;//Переменная , которая хранит закончили ли мы работу тактики или нет.
 
         //УДАЛИТЬ ПЕРЕД ДЕПЛОИТОМ!!!!!
         VisualClient vc=null;
-
+        
         public void setVisual()
         {
             try
@@ -118,7 +118,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             int CD = self.RemainingCooldownTicksByAction[2];
             double nearestTargetDistance = myTactic.getNearestTargetDistance(world, self);
-            if (nearestTargetDistance<ENEMY_POROG*0.9D || (nearestTargetDistance < ENEMY_POROG && CD<10) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)
+            if /*((nearestTargetDistance<ENEMY_POROG*0.9D || (nearestTargetDistance < ENEMY_POROG && CD<10) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)&&*/(!myTactic.TacticIsAll(world,self,game))//)
             {
                 myTactic.getTacticMove(world, game, self, move);
                 if (vc != null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
