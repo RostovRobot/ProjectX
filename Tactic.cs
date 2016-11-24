@@ -33,7 +33,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         /// <summary>
         /// Пороговое значение дистанции между магом и ближайшим врагом для отступления
         /// </summary>
-        public int MIN_VRAG_DISTANCE = 250;
+        public int MIN_VRAG_DISTANCE = 140;
 
         /// <summary>
         /// Выбор тактических приемов
@@ -412,6 +412,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     move.Turn = angle;
                     if(angle==0)
                     {
+                        move.Action = ActionType.Staff;
+                        move.CastAngle = 0;
+
                         //move.Speed = -game.WizardBackwardSpeed;
                         LowHealthCheck(world, game, self, move);
                     }

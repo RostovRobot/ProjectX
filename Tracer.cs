@@ -193,13 +193,9 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             List<LinePoint> FullWayPoint;
             List<LinePoint> tracebase;
             FullWayPoint = getPointMap(world);
-            if (self.Faction == Faction.Academy)
-            {
-                tracebase = tracerGet(FullWayPoint, point, 0, self);
-            } else
-            {
-                tracebase = tracerGet(FullWayPoint, point, 6, self);
-            }
+            
+            tracebase = tracerGet(FullWayPoint, point, 0, self);                           
+            
             List<LinePoint> tracemid = tracerGet(FullWayPoint, point, 3, self);
             double summid = 0;
             double sumbase = 0;
@@ -275,27 +271,35 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             double py = trace[0].Y;
             if (trace.Count > 1)
             {
-                if (isCrash(self) == true)
+                if (isCrash(self) || CheckCrash == 1)
                 {
-                    if (CheckCrash == 0)
+
+                    if (Math.Sqrt(Math.Pow(CrashP[0] - self.X, 2) + Math.Pow(CrashP[1] - self.Y, 2)) < CrashDis)
                     {
                         CrashedMove(move, self, game);
                         CheckCrash = 1;
                     }
+
+
                     else
-                    {                            
-                                                                          
-                        angle = self.GetAngleTo(trace[0].X, trace[0].Y);                       
+                    {
+                        CrashP[0] = -1000;
+                        CrashP[1] = -1000;
+                        angle = self.GetAngleTo(trace[0].X, trace[0].Y);
                         move.Turn = angle;
 
                         if (Math.Abs(angle) < game.StaffSector / 4.0D)
                         {
                             move.Speed = game.WizardForwardSpeed;
                         }
+                        if ((Math.Sqrt(Math.Pow(trace[0].X - self.X, 2) + Math.Pow(trace[0].Y - self.Y, 2))) < 10)
+                        {
+                            CheckCrash = 0;
+                        }
                     }
 
 
-                    } else
+                } else
                 {
                     double resX = px - trace[1].Y;
                     double resY = py - trace[1].X;
@@ -377,10 +381,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             
             if (trace.Count > 1)
             {
-                double a;
+                
                 if (isCrash(self) || CheckCrash == 1)
                 {
-                    a = Math.Sqrt(Math.Pow(CrashP[0] - self.X, 2) + Math.Pow(CrashP[1] - self.Y, 2));
+                   
                     if (Math.Sqrt(Math.Pow(CrashP[0] - self.X, 2) + Math.Pow(CrashP[1] - self.Y, 2)) < CrashDis)
                     {
                         CrashedMove(move, self, game);
