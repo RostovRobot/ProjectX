@@ -15,7 +15,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         bool isTactic = false;
 
         //сдюкхрэ оепед деокнхрнл!!!!!
-        VisualClient vc;
+        VisualClient vc=null;
 
         public void setVisual()
         {
