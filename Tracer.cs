@@ -370,8 +370,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     CrashedMove(move, self, game);
                 } else
                 {
-                    double resX = px - trace[1].X;
-                    double resY = py - trace[1].Y;
+                    double resX = px - trace[1].Y;
+                    double resY = py - trace[1].X;
                     double res = Math.Sqrt(Math.Pow(resX, 2) + Math.Pow(resY, 2));
 
                     if (self.GetDistanceTo(trace[0].X, trace[0].Y) < 60)
