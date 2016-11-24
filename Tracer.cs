@@ -12,7 +12,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tracer
     {
-
+        public int CheckCrash = 0;
+        public double[] CrashP = {-1000,-1000 };
+        
+        public int CrashDis = 100;
         private Wizard self;
         private World world;
         private Game game;
@@ -274,8 +277,25 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             {
                 if (isCrash(self) == true)
                 {
-                    CrashedMove(move, self, game);
-                } else
+                    if (CheckCrash == 0)
+                    {
+                        CrashedMove(move, self, game);
+                        CheckCrash = 1;
+                    }
+                    else
+                    {                            
+                                                                          
+                        angle = self.GetAngleTo(trace[0].X, trace[0].Y);                       
+                        move.Turn = angle;
+
+                        if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                        {
+                            move.Speed = game.WizardForwardSpeed;
+                        }
+                    }
+
+
+                    } else
                 {
                     double resX = px - trace[1].Y;
                     double resY = py - trace[1].X;
@@ -292,7 +312,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         {
                             i = 0;
                         }
-                    } else
+                    }
+                    else
                     {
                         angle = self.GetAngleTo(trace[0].X, trace[0].Y);
                     }
@@ -353,12 +374,37 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             double angle = self.GetAngleTo(trace[0].X, trace[0].Y);
             double px = trace[0].X;
             double py = trace[0].Y;
-
+            
             if (trace.Count > 1)
             {
-                if (isCrash(self) == true)
+                double a;
+                if (isCrash(self) || CheckCrash == 1)
                 {
-                    CrashedMove(move, self, game);
+                    a = Math.Sqrt(Math.Pow(CrashP[0] - self.X, 2) + Math.Pow(CrashP[1] - self.Y, 2));
+                    if (Math.Sqrt(Math.Pow(CrashP[0] - self.X, 2) + Math.Pow(CrashP[1] - self.Y, 2)) < CrashDis)
+                    {
+                        CrashedMove(move, self, game);
+                        CheckCrash = 1;
+                    }
+
+                
+                else
+                {
+                        CrashP[0] = -1000;
+                        CrashP[1] = -1000;
+                    angle = self.GetAngleTo(trace[0].X, trace[0].Y);
+                    move.Turn = angle;
+
+                    if (Math.Abs(angle) < game.StaffSector / 4.0D)
+                    {
+                        move.Speed = game.WizardForwardSpeed;
+                    }
+                    if((Math.Sqrt(Math.Pow(trace[0].X - self.X, 2) + Math.Pow(trace[0].Y - self.Y, 2)))<10)
+                        {
+                            CheckCrash = 0;
+                        }
+                }
+
                 } else
                 {
                     double resX = px - trace[1].Y;
@@ -403,7 +449,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         private double oldX = 0;
         private double oldY = 0;
         public int ago = 30;
-        private int deltaPorog = 70;  //подобрать
+        private double deltaPorog = 0.01;  //подобрать
         private int stepsPorog = 80;  //подобрать
         public bool isCrash(Wizard self)
         {
@@ -411,8 +457,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             double deltaY = self.Y - oldY;
             double delta = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
+            
             if (delta < deltaPorog)
             {
+           
                 steps++;
             } else
             {
@@ -421,14 +469,14 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 oldY = self.Y;
             }
 
-            if (steps > stepsPorog || ago != 0)
+            if (steps >= stepsPorog )
             {
-                if (ago == 0)
+                if (steps == stepsPorog)
                 {
-                    ago = 30;
+                    CrashP[0] = self.X;
+                    CrashP[1] = self.Y;
                 }
-                ago = ago - 1;
-                return true;
+                    return true;
 
             } else
             {
