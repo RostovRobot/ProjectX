@@ -90,6 +90,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 vc.FillRect(1650, 1650, 2350, 2350, 1.0f, 0.0f, 1.0f);
                 vc.EndPre();
                 vc.BeginPost(); //начинаем отрисовку поверх всех объектов локал-раннера
+                string str = Convert.ToString(self.X) + " : " + Convert.ToString(self.Y);
+                vc.Text(self.X, self.Y, str, 0.0f, 0.0f, 1.0f);
             }
             if (self.IsMaster)
             {
@@ -99,7 +101,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
 
             hotZone = myStrat.getHotZone(world, game, self);
-            myStrat.getHotZone2(world, game, self, vc);
+            //myStrat.getHotZone2(world, game, self, vc);
             if (vc != null)
             {
                 if (hotZone != null)
@@ -114,6 +116,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 foreach (LinePoint LP in MapPoint)
                 {
                     vc.FillCircle(LP.X, LP.Y, 5, 0.0f, 1.0f, 0.0f);
+                    //string str = Convert.ToString(LP.X)+" : " + Convert.ToString(LP.Y);
+                    //vc.Text(LP.X, LP.Y, str, 0.0f, 0.0f, 1.0f);
                 }
             }
             int CD = self.RemainingCooldownTicksByAction[2];
