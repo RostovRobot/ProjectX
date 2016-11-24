@@ -7,7 +7,7 @@ if not exist %name%.cs (
 
 del /F /Q %name%.*exe
 
-set COMPILER_PATH=
+set COMPILER_PATH="
 
 if "%ROSLYN_HOME%" neq "" (
     if exist "%ROSLYN_HOME%\tools\csc.exe" (
@@ -31,4 +31,4 @@ for %%i in (Properties\*.cs) do (
     set FILES=!FILES! %%i
 )
 
-call "%COMPILER_PATH:"=%csc.exe" /optimize+ /r:System.Numerics.dll /out:%name%.exe!FILES! 1>compilation.log 2>&1
+call "%COMPILER_PATH:"=%csc" /optimize+ /r:System.Numerics.dll /out:%name%.exe!FILES! 1>compilation.log 2>&1

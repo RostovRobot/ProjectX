@@ -7,7 +7,7 @@ if not exist %name%.cs (
 
 del /F /Q %name%.*exe
 
-set COMPILER_PATH=
+set COMPILER_PATH="
 
 if "%MONO_HOME%" neq "" (
     if exist "%MONO_HOME%\bin\mcs.bat" (
