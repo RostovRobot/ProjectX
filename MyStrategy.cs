@@ -122,23 +122,25 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             }
             int CD = self.RemainingCooldownTicksByAction[2];
             double nearestTargetDistance = myTactic.getNearestTargetDistance(world, self);
-            if /*((nearestTargetDistance<ENEMY_POROG*0.9D || (nearestTargetDistance < ENEMY_POROG && CD<10) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)&&*/(!myTactic.TacticIsAll(world,self,game))//)
+            if (world.TickIndex > game.FactionMinionAppearanceIntervalTicks*0.75D)
             {
-                myTactic.getTacticMove(world, game, self, move);
-                if (vc != null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
-            } else
-            {
-                if (vc == null)
+                if /*((nearestTargetDistance<ENEMY_POROG*0.9D || (nearestTargetDistance < ENEMY_POROG && CD<10) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)&&*/(!myTactic.TacticIsAll(world, self, game))//)
                 {
-                    myTracer.goTo(hotZone, world, game, self, move);
+                    myTactic.getTacticMove(world, game, self, move);
+                    if (vc != null) vc.Text(self.X, self.Y + 50, "TACTIC", 0.0f, 0.0f, 1.0f);
                 } else
                 {
-                    myTracer.goToVisual(hotZone, world, game, self, move, vc);
+                    if (vc == null)
+                    {
+                        myTracer.goTo(hotZone, world, game, self, move);
+                    } else
+                    {
+                        myTracer.goToVisual(hotZone, world, game, self, move, vc);
 
-                    vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
+                        vc.Text(self.X, self.Y + 50, "TRACER", 0.0f, 0.0f, 1.0f);
+                    }
                 }
             }
-            
             /*if(nearestTargetDistance < ENEMY_POROG-50 ||(isTactic && nearestTargetDistance < ENEMY_POROG) || self.GetDistanceTo(hotZone.getX(), hotZone.getY()) < HOT_ZONE_POROG)
             {
                 myTactic.getTacticMove(world, game, self, move);
