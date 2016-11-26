@@ -18,6 +18,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         double CRITICAL_ENEMY_HEALTH_POROG = 30;
         double FATALITY_PRIORITY_BONUS = 100;//Бонус за добивание
         double CRITICAL_LIFE_POROG = 0.6;
+        double obxoddist = 200;
 
 
         /// <summary>
@@ -54,10 +55,21 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             LivingUnit target = getTartgetwithHigestPriority(world, self, game);
             
             getRocket(world, game, self, target, move);
-            Otstup(world, game, self, move);
-            if(((double)self.Life/self.MaxLife<=CRITICAL_LIFE_POROG)&&  (target!=null))
+            Point2D enemybase = GetEnemyBase(self);
+            if (GetDistance(self.X, self.Y, enemybase.getX(), enemybase.getY()) < obxoddist)
             {
-                
+
+                BaseObxod(world, game, self, move, target, 30D);
+
+
+            }
+            else
+            {
+                Otstup(world, game, self, move);
+            }
+            if (((double)self.Life / self.MaxLife <= CRITICAL_LIFE_POROG) && (target != null))
+            {
+
                 LowHealthCheck(world, game, self, move);
                 //move.Speed = -game.WizardBackwardSpeed;
             }
@@ -229,6 +241,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
 
         }
 
+        
+
         /// <summary>
         /// Посик ближайшего врага
         /// </summary>
@@ -349,6 +363,17 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return isAll;
 
         }
+        Point2D GetEnemyBase(Wizard self)
+        {
+            if (self.Faction == Faction.Academy)
+          {
+              return new Point2D(3600, 400);
+          } else
+          {
+                return new Point2D(400, 3600);
+          }
+
+        }
 
 
 
@@ -441,6 +466,22 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             move.StrafeSpeed = 3.0 *  Math.Sin(angle);
             move.Speed = -3.0 * Math.Cos(angle);
             
+
+        }
+        public void BaseObxod(World world, Game game, Wizard self, Move move,LivingUnit enemy,double dist)
+        {
+            Point2D enemybase = GetEnemyBase(self);
+            move.Turn = self.GetAngleTo(self.X,self.Y);
+            move.StrafeSpeed = -5.0D;
+            //if(50>GetDistance(self.X,self.Y,400,3600))
+            //{
+            //    move.Speed = 2.0D;
+
+            //}
+            //else
+            //{
+            //    move.Speed = -2.0D;
+            //}
 
         }
 
