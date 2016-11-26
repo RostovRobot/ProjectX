@@ -75,17 +75,17 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                         case 2:
                         case 6:
                         case 7:
-                            lineType = 2;//1; то линия - топ
+                            lineType = 1; //то линия - топ
                             break;
                         case 3:
                         case 8:
-                            lineType = 2; //то линия - мид
+                            lineType = 2;//то линия - мид
                             break;
                         case 4:
                         case 5:
                         case 9:
                         case 10:
-                            lineType = 2;// 3; //то линия - боттом
+                            lineType = 3; //то линия - боттом
                             break;
                     }
                 }

@@ -90,10 +90,24 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 }
             }
             needPoint = points[ineedPoint];
-
+            
 
             NearestPointLine = points[NearestPoint].line;
-            if (NearestPointLine == needPoint.line)
+
+            if ((needPoint2D.getX() == 3500) && (needPoint2D.getY() == 500))
+            {
+                switch (NearestPointLine)
+                {
+                    case 0:
+                        needPoint = FullWaypoints[0][FullWaypoints[0].Count - 1]; break;
+                    case 1:
+                        needPoint = FullWaypoints[1][FullWaypoints[1].Count - 1]; break;
+                    case 2:
+                        needPoint = FullWaypoints[2][FullWaypoints[2].Count - 1]; break;
+                    default: break;
+                }
+                }
+                if (NearestPointLine == needPoint.line)
             {
                 if (points[NearestPoint].index <= needPoint.index)
                 {
