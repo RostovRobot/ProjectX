@@ -13,12 +13,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
     /// </summary>
     class Tactic
     {
-        double DistanceK = 20;//коэффицент удаления
+        double DistanceK = 0.7;//коэффицент удаления
         double HealthK = 125;
         double CRITICAL_ENEMY_HEALTH_POROG = 30;
-        double FATALITY_PRIORITY_BONUS = 100;//Бонус за добивание
+        double FATALITY_PRIORITY_BONUS = 250;//Бонус за добивание
         double CRITICAL_LIFE_POROG = 0.6;
         double obxoddist = 200;
+        double FATALITY_WIZARD_K = 1.7;
 
 
         /// <summary>
@@ -200,6 +201,10 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                     if(target.Life<CRITICAL_ENEMY_HEALTH_POROG)
                     {
                         targetpriority += FATALITY_PRIORITY_BONUS;
+                        if(target is Wizard)
+                        {
+                            targetpriority *= FATALITY_WIZARD_K;
+                        }
 
                     }
                     if (targetpriority > maxPriority)
@@ -365,13 +370,13 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         }
         Point2D GetEnemyBase(Wizard self)
         {
-            if (self.Faction == Faction.Academy)
-          {
+          //  if (self.Faction == Faction.Academy)
+          //{
               return new Point2D(3600, 400);
-          } else
-          {
-                return new Point2D(400, 3600);
-          }
+          //} else
+          //{
+          //      return new Point2D(400, 3600);
+          //}
 
         }
 
