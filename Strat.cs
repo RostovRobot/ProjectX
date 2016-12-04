@@ -139,6 +139,72 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             return HotZone;
         }
 
+        public SkillType getSkill(Move move, Wizard self)
+        {
+            SkillType skillType = new SkillType();
+            if (self.Level == 1)
+            {
+                skillType = SkillType.MagicalDamageBonusPassive1;
+            }
+            if (self.Level == 2)
+            {
+                skillType = SkillType.MagicalDamageBonusAura1;
+            }
+            if (self.Level == 3)
+            {
+                skillType = SkillType.MagicalDamageBonusPassive2;
+            }
+            if (self.Level == 4)
+            {
+                skillType = SkillType.MagicalDamageBonusAura2;
+            }
+            if (self.Level == 5)
+            {
+                skillType = SkillType.FrostBolt;
+            }
+            if (self.Level == 6)
+            {
+                skillType = SkillType.RangeBonusPassive1;
+            }
+            if (self.Level == 7)
+            {
+                skillType = SkillType.RangeBonusAura1;
+            }
+            if (self.Level == 8)
+            {
+                skillType = SkillType.RangeBonusPassive2;
+            }
+            if (self.Level == 9)
+            {
+                skillType = SkillType.RangeBonusAura2;
+            }
+            if (self.Level == 10)
+            {
+                skillType = SkillType.AdvancedMagicMissile;
+            }
+            if (self.Level == 11)
+            {
+                skillType = SkillType.MagicalDamageAbsorptionPassive1;
+            }
+            if (self.Level == 12)
+            {
+                skillType = SkillType.MagicalDamageAbsorptionAura1;
+            }
+            if (self.Level == 13)
+            {
+                skillType = SkillType.MagicalDamageAbsorptionPassive2;
+            }
+            if (self.Level == 14)
+            {
+                skillType = SkillType.MagicalDamageAbsorptionAura2;
+            }
+            if (self.Level == 15)
+            {
+                skillType = SkillType.Shield;
+            }
+            return skillType;
+        }
+
         /// <summary>
         /// !!! НЕ РЕАЛИЗОВАНО !!! Возвращает координаты самой важной зоны (реализация Овсянникова)
         /// </summary>

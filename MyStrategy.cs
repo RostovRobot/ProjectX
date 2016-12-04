@@ -14,6 +14,8 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
         Point2D hotZone = new Point2D();
         bool isTactic = false;//Переменная , которая хранит закончили ли мы работу тактики или нет.
 
+        int oldLevel = 0;
+
         //УДАЛИТЬ ПЕРЕД ДЕПЛОИТОМ!!!!!
         VisualClient vc=null;
         
@@ -93,11 +95,12 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
                 string str = Convert.ToString(self.X) + " : " + Convert.ToString(self.Y);
                 vc.Text(self.X, self.Y, str, 0.0f, 0.0f, 1.0f);
             }
-            if (self.IsMaster)
+            if (game.IsSkillsEnabled == true)
             {
-                //вызываем метод setKommand у объекта-стратегии
-
-                //НАДО ПРОВЕРИТЬ, МОЖЕМ ЛИ МЫ ВЫДАВАТЬ КОМАНДЫ ВСЕМ, ВКЛЮЧАЯ СЕБЯ
+                if (self.Level != oldLevel)
+                {
+                    move.SkillToLearn = myStrat.getSkill(move, self);
+                }
             }
 
             hotZone = myStrat.getHotZone(world, game, self);
@@ -163,6 +166,7 @@ namespace Com.CodeGame.CodeWizards2016.DevKit.CSharpCgdk
             //вызываем метод getHotZone у объекта-стратегии
 
             if(vc!=null) vc.EndPost(); //заканчиваем отрисовку
+            oldLevel = self.Level;
         }
     }
 }
